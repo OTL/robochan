@@ -55,7 +55,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 @implementation RobochanAppDelegate
 
 @synthesize window;
-//@synthesize fd;
+
 
 - (void)sendCommand:(id)sender
 {
