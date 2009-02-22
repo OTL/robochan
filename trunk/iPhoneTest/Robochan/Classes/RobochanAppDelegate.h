@@ -49,18 +49,19 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import <UIKit/UIKit.h>
 
 @class EAGLView;
+@class KHRInterface;
 
 @interface RobochanAppDelegate : NSObject <UIApplicationDelegate> {
-/* 	IBOutlet UIWindow *window; */
-/* 	IBOutlet EAGLView *glView; */
-	UIWindow *window;
-	EAGLView *glView;
-	UILabel *label;
+  UIWindow *window;
+  EAGLView *glView;
+  UILabel *label;
+  KHRInterface *ki;
 }
 
 @property (nonatomic, retain) UIWindow *window;
 
 - (void)setLabelText:(NSString *)str;
-
+//- (void)sendCommand:(id)sender;
+//- (void)addSegment;
 @end
 

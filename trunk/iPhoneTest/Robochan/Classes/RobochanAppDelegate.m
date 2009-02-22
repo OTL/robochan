@@ -48,35 +48,91 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #import "RobochanAppDelegate.h"
 #import "EAGLView.h"
-								   //#import "set_text.h"
+#import "KHRInterface.h"
+
+//#import "set_text.h"
 
 @implementation RobochanAppDelegate
 
 @synthesize window;
+//@synthesize fd;
 
-// Sets up the frame rate and starts animating the sprite.
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
-	//application = application;
-	// Look in the Info.plist file and you'll see the status bar is hidden
-	// Set the style to black so it matches the background of the application
+- (void)sendCommand:(id)sender
+{
+  if (ki.fd >= 0){
+    switch([sender selectedSegmentIndex]){
+    case 0:
+      break;
+    case 1:
+      [ki getSettings];
+      break;
+    case 2:
+      [ki playMotion:0];
+    case 3:
+      [ki playMotion:1];
+    case 4:
+      [ki getAngles];
+    default:
+      break;
+    }
+  }
+}
+
+- (void)addSegment
+{
+  UISegmentedControl *segmentedControl = 
+    [[UISegmentedControl alloc] initWithItems:
+				  [NSArray arrayWithObjects:
+					   @"connect",
+					   @"gs",
+					   @"p 0",
+					   @"p 1 ",
+					   @"a ",
+					   nil]];
+  // Compute a rectangle that is positioned correctly for the segmented control you'll use as a brush color palette
   CGRect rect = [[UIScreen mainScreen] bounds];
-  window = [[UIWindow alloc] initWithFrame:rect];
+  CGRect frame = CGRectMake(rect.origin.x + 10,
+			    rect.size.height - 50 - 10,
+			    rect.size.width - 20,
+			    30);
+  segmentedControl.frame = frame;
+  // When the user chooses a color, the method changeBrushColor: is called.
+  [segmentedControl addTarget:self action:@selector(sendCommand:) forControlEvents:UIControlEventValueChanged];
+  segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+  // Make sure the color of the color complements the black background
+  segmentedControl.tintColor = [UIColor darkGrayColor];
+  // Set the third color (index values start at 0)
+  segmentedControl.selectedSegmentIndex = 0;
+	
+  // Add the control to the window
+  [window addSubview:segmentedControl];
+  // Now that the control is added, you can release it
+  [segmentedControl release];
+}
 
-  [application setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:NO];
-
-  rect = [[UIScreen mainScreen] applicationFrame];
+- (void)addGLView
+{
+  CGRect rect = [[UIScreen mainScreen] applicationFrame];
   glView = [[EAGLView alloc] initWithFrame:CGRectMake(rect.origin.x,
 						      rect.origin.y,
 						      rect.size.width,
 						      rect.size.height - 50
 						      )];
-  glView.app = self;
 
-  [window addSubview:glView];
+  // アプリケーション本体を登録
+  glView.app = self;
 
   //オブジェクト(window)をウィンドウに追加
   glView.animationInterval = 1.0 / 60.0;
   [glView startAnimation];
+
+  [window addSubview:glView];
+
+}
+
+- (void)addLabel
+{
+  CGRect rect = [[UIScreen mainScreen] applicationFrame];  
   CGRect textRect =  CGRectMake(rect.origin.x,
 				rect.size.height - 50,
 				rect.size.width,
@@ -89,19 +145,34 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
   label.textColor = [UIColor colorWithRed:76.0/255.0 green:86.0/255.0 blue:108.0/255.0 alpha:1.0];
   label.backgroundColor = [UIColor clearColor];
   [window addSubview:label];  
+}
 
-//   output_text.text= @"robochan";
-//   output_text.location = CGPointMake(10,450);
-//   output_text.color = [UIColor whiteColor];
-//   [window addSubview:output_text];
-//   [output_text release];
+// Sets up the frame rate and starts animating the sprite.
+- (void)applicationDidFinishLaunching:(UIApplication *)application {
+	//application = application;
+	// Look in the Info.plist file and you'll see the status bar is hidden
+	// Set the style to black so it matches the background of the application
+  CGRect rect = [[UIScreen mainScreen] bounds];
+  window = [[UIWindow alloc] initWithFrame:rect];
+
+  [application setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:NO];
+
+  // GLViewを追加
+  [self addGLView];
+
+  // セグメントコントロールを追加
+  [self addSegment];
+
+  // ラベル（デバッグ用？）追加
+  [self addLabel];
 
   // Now show the status bar, but animate to the style.
   [application setStatusBarHidden:NO animated:YES];
 
   //ウィンドウの表示
   [window makeKeyAndVisible];
-  [glView drawView];
+  //[glView drawView];
+  ki = [[KHRInterface alloc] init];
 }
 
 
@@ -122,6 +193,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 	[glView stopAnimation];
 	[window release];
 	[label release];
+	[ki release];
 	[super dealloc];
 }
 
