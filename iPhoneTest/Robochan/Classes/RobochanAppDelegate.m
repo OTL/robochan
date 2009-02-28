@@ -48,6 +48,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 
 #import "RobochanAppDelegate.h"
 #import "EAGLView.h"
+#import "world.h"
 #import "KHRInterface.h"
 
 //#import "set_text.h"
@@ -55,7 +56,6 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 @implementation RobochanAppDelegate
 
 @synthesize window;
-
 
 - (void)sendCommand:(id)sender
 {
@@ -113,12 +113,13 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 - (void)addGLView
 {
   CGRect rect = [[UIScreen mainScreen] applicationFrame];
+  //  glView = [[EAGLView alloc] initWithFrame:CGRectMake(rect.origin.x,
   glView = [[EAGLView alloc] initWithFrame:CGRectMake(rect.origin.x,
 						      rect.origin.y,
 						      rect.size.width,
 						      rect.size.height - 50
 						      )];
-
+  
   // アプリケーション本体を登録
   glView.app = self;
 

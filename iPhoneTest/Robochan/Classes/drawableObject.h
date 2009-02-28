@@ -53,44 +53,16 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
 
-#import "RobochanAppDelegate.h"
-#import "world.h"
-
-@interface EAGLView : UIView
+@interface drawableObject : NSObject
 {
-@private
-	
-  /* The pixel dimensions of the backbuffer */
-  GLint backingWidth;
-  GLint backingHeight;
-  
-  EAGLContext *context;
-  
-  /* OpenGL names for the renderbuffer and framebuffers used to render to this view */
-  GLuint viewRenderbuffer, viewFramebuffer;
-  
-  /* OpenGL name for the depth buffer that is attached to viewFramebuffer, if it exists (0 if it does not exist) */
-  GLuint depthRenderbuffer;
-  
-  /* OpenGL name for the sprite texture */
-  //  GLuint spriteTexture;
-  world *wrld;
-  
-  NSTimer *animationTimer;
-  NSTimeInterval animationInterval;
-  int touch;
-  int move;
-  RobochanAppDelegate *app;
+  float pos[3];
+  float rot[4];
 }
 
-- (void)startAnimation;
-- (void)stopAnimation;
-- (void)drawView;
+- (void)draw;
+- (void)drawShape;
 
-- (id)initWithFrame:(CGRect)rect; //add
-
-@property NSTimeInterval animationInterval;
-@property (readwrite, retain) RobochanAppDelegate *app;
-@property (readwrite, retain) world *wrld;
+- (void)setPos:(float)x:(float)y:(float)z;
+- (void)setRot:(float)t:(float)x:(float)y:(float)z;
 
 @end
