@@ -78,9 +78,12 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
   
   NSTimer *animationTimer;
   NSTimeInterval animationInterval;
-  int touch;
-  int move;
+  //int touch;
+  //int move;
   RobochanAppDelegate *app;
+  //
+  Boolean firstTouch;
+
 }
 
 - (void)startAnimation;
@@ -88,6 +91,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 - (void)drawView;
 
 - (id)initWithFrame:(CGRect)rect; //add
+- (float)distanceBetweenTwoPoints:(CGPoint)fromPoint toPoint:(CGPoint)toPoint;
 
 @property NSTimeInterval animationInterval;
 @property (readwrite, retain) RobochanAppDelegate *app;
