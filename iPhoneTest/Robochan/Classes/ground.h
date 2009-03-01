@@ -58,7 +58,7 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 @interface ground : drawableObject
 {
   GLfloat gcolor[2][4];
-  GLfloat gvertex[4*3];
+  GLfloat gvertex[12];
   float height;
 }
 

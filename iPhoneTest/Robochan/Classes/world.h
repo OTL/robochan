@@ -63,9 +63,17 @@ Copyright (C) 2008 Apple Inc. All Rights Reserved.
 @private
   id drawTargets[MAX_OBJNUM];
   unsigned int objNum;
+@public
+  float *viewPos;
+  float *viewRot;
 }
 
 - (void) draw;
 - (int)addObject:(id)obj;
+- (void)addRandomRobot;
+- (void)setCamera;
+
+@property (readwrite) float *viewPos;
+@property (readwrite) float *viewRot;
 
 @end

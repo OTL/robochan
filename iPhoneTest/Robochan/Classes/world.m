@@ -52,9 +52,36 @@
 
 @implementation world
 
+@synthesize viewPos;
+@synthesize viewRot;
+
+- (void) addRandomRobot
+{
+  boxRobot *r = [boxRobot new];
+  float x = 4 * (0.5 - (float)rand()/RAND_MAX);
+  float y = 4 * (0.5 - (float)rand()/RAND_MAX);
+  [r setPos:x:0.0:y];
+  [self addObject:r];
+}
+
 - (id) init
 {
+  // 変数の初期化
   objNum = 0;
+
+  // 視点の初期化
+  viewPos = (float*)malloc(sizeof(float)*3);
+  viewRot = (float*)malloc(sizeof(float)*3);
+
+  viewPos[0] =   0.0;
+  viewPos[1] =  -1.0;
+  viewPos[2] = -10.0;
+
+  viewRot[0] = 10.0;
+  viewRot[1] =  0.0;
+  viewRot[2] =  0.0;
+
+  // 物体の作成
   [self addObject:(id)[ground new]];
   [self addObject:(id)[boxRobot new]];
 
@@ -98,8 +125,7 @@
   glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
 
   /* 視点の移動（物体の方を奥に移す）*/
-  glRotatef(10, 1.0, 0.0, 0.0);
-  glTranslatef(0.0, -1.0, -10.0);
+  [self setCamera];
 
   for (int i = 0; i < objNum; i++){
     [drawTargets[i] draw];
@@ -107,6 +133,25 @@
 
   glFlush();
 
+}
+
+- (void)setCamera
+{
+  glRotatef(viewRot[0], 1, 0, 0);
+  glRotatef(viewRot[1], 0, 1, 0);
+  glRotatef(viewRot[2], 0, 0, 1);
+
+  //  glTranslatef(0.0, -1.0, -10.0);
+  glTranslatef(viewPos[0],viewPos[1],viewPos[2]);
+
+}
+
+- (void)dealloc
+{
+  free(viewPos);
+  free(viewRot);
+
+  [super dealloc];
 }
 
 @end

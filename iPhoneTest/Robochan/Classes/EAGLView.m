@@ -52,7 +52,7 @@
 #import <OpenGLES/EAGLDrawable.h>
 
 #import "EAGLView.h"
-#import "math.h"
+#import "world.h"
 
 @interface EAGLView (EAGLViewPrivate)
 
@@ -131,6 +131,9 @@
 		
     [self setupView];
     [self drawView];
+
+    // マルチタッチを有効にする
+    [self setMultipleTouchEnabled:YES];
   }
 	
   return self;
@@ -271,20 +274,65 @@
 // Handles the start of a touch
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-  if (touch == 0){
-    touch = 1;
-  }else{
-    touch = 0;
-  }
+  firstTouch = YES;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-  if (move == 0){
-    move = 1;
-  }else{
-    move = 0;
+  //マルチタッチ対応
+  if ([touches count] > 1){
+    float previousDistance;
+    float multiDistance;
+    
+    UITouch *t1 = [[touches allObjects] objectAtIndex:0];
+    UITouch *t2 = [[touches allObjects] objectAtIndex:1];
+    CGPoint pp1 = [t1 previousLocationInView:self];
+    CGPoint pp2 = [t2 previousLocationInView:self];
+    previousDistance = [self distanceBetweenTwoPoints:pp1 toPoint:pp2];
+    
+    if (firstTouch){
+      firstTouch = NO;
+    }else{
+      CGPoint p1 = [t1 locationInView:self];
+      CGPoint p2 = [t2 locationInView:self];
+      multiDistance = [self distanceBetweenTwoPoints:p1 toPoint:p2];
+      wrld.viewPos[2] += 0.1 * (multiDistance - previousDistance);
+    }
   }
+  // シングルタッチ
+  else{
+    UITouch* touch = [[event touchesForView:self] anyObject];
+    CGPoint location;
+    CGPoint previousLocation;
+
+    previousLocation = [touch previousLocationInView:self];
+    if (firstTouch) {
+      firstTouch = NO;
+    } else {
+      location = [touch locationInView:self];
+      // Render the stroke
+      wrld.viewPos[0] += 0.01 * (previousLocation.x - location.x);
+      //previousLocation = [touch previousLocationInView:self];
+    }
+  }
+}
+
+// Handles the end of a touch event when the touch is a tap.
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+  // ポインティング時
+  if (firstTouch) {
+    // ロボットを増やす（テスト）
+    [wrld addRandomRobot];
+  }
+  firstTouch = NO;
+}
+
+- (float)distanceBetweenTwoPoints:(CGPoint)fromPoint toPoint:(CGPoint)toPoint {
+    float x = toPoint.x - fromPoint.x;
+    float y = toPoint.y - fromPoint.y;
+    
+    return sqrt(x * x + y * y);
 }
 
 // Stop animating and release resources when they are no longer needed.
