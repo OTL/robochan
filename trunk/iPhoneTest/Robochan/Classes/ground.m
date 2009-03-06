@@ -1,13 +1,31 @@
+/** @file ground.m
+ @brief groundクラス
+ 
+ @author Takashi Ogura
+ @date 2009/03/01
+ @version 0.0.1
+*/
+
+/*  $Id:$ */
+
 #import "ground.h"
 
 @implementation ground
 
+/** @brief 初期化
+ *
+ * デフォルトの高さで初期化する
+ * @retval self 
+ */
 - (id) init
 {
   [super init];
   return [self initWithHeight:-1.8];
 }
 
+/** @brief 色を指定する
+ * RGB(0-1)で２色指定
+ */
 - (void) setColor:(float)r1:(float)g1:(float)b1:(float)a1:
 	(float)r2:(float)g2:(float)b2:(float)a2
 {
@@ -22,6 +40,12 @@
   gcolor[1][3]=a2;
 }
 
+/**
+ * 高さを指定して初期化する
+ *
+ * @param h 床の高さ
+ * @retval self 
+ */
 - (id) initWithHeight:(float)h
 {
   height = h;
@@ -32,8 +56,8 @@
   return (self);
 }
 
-/*
- * �n�ʂ�`��
+/**
+ * 地面を描く
  */
 - (void) drawShape
 {

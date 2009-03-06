@@ -1,3 +1,12 @@
+/** @file KHRInterface.h
+ @brief KHR-2HVを動かすためのシリアル通信プログラム
+ @author Tamaki Nishino & Takashi Ogura
+ @date 2009/03/01
+ @version 0.0.1
+*/
+
+/*  $Id:$ */
+
 #import <Foundation/NSObject.h>
 #import <stdio.h>
 #import <stdlib.h>
@@ -7,8 +16,8 @@
 #import <termios.h>
 #import <time.h>
 
-#define DEV_NAME    "/dev/tty.iap"        // �f�o�C�X�t�@�C����
-#define BAUD_RATE    B115200                // RS232C�ʐM�{�[���[�g
+#define DEV_NAME    "/dev/tty.iap"        //< デバイスファイル名
+#define BAUD_RATE    B115200              //< RS232C通信ボーレート
 
 #define RCB3J_OPT_ACK_ON 1
 #define RCB3J_OPT_EEPROM 2
@@ -33,22 +42,36 @@
 #define RCB3J_CMD_SET_ALL_JOINT_PARAM 0xfd
 #define RCB3J_CMD_GET_ALL_JOINT_PARAM 0xfc
 
-@class KHRInterface;
 
+//@class KHRInterface;
+
+/** 
+ * @brief KHR-2HVをシリアル通信で操作するためのインタフェースとなるクラス
+ * 
+ * 
+ */
 @interface KHRInterface : NSObject {
+  /// USARTファイルディスクリプタ
   int fd;
-  unsigned char RCB3J_send_buffer[128];
-  unsigned char RCB3J_receive_buffer[128];
+  /// 送信用バッファ
+  unsigned char send_buffer[128];
+  /// 受信用バッファ
+  unsigned char receive_buffer[128];
 }
 
 @property (readonly) int fd;
 
+///ロボットの状態取得
 - (int)getSettings;
 - (int)OO;
 - (int)d;
+///ロボットの関節角度取得
 - (int)getAngles;
+///サーボオフの関節の現在角度を取得する
 - (int)freeJointAndGetAngles:(int)i;
+///ロボットの関節角度を指定する
 - (int)setJointAngle:(int)i;
+///プリセットモーションを再生する
 - (int)playMotion:(int)i;
 
 @end

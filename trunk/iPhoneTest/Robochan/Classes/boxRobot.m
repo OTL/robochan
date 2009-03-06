@@ -1,52 +1,11 @@
-/*
-
-  File: BoxRobot.m
-  Abstract: This class wraps the CAEAGLLayer from CoreAnimation into a convenient
-  UIView subclass. The view content is basically an EAGL surface you render your
-  OpenGL scene into.  Note that setting the view non-opaque will only work if the
-  EAGL surface has an alpha channel.
-
-  Version: 1.7
-
-  Disclaimer: IMPORTANT:  This Apple software is supplied to you by Apple Inc.
-  ("Apple") in consideration of your agreement to the following terms, and your
-  use, installation, modification or redistribution of this Apple software
-  constitutes acceptance of these terms.  If you do not agree with these terms,
-  please do not use, install, modify or redistribute this Apple software.
-
-  In consideration of your agreement to abide by the following terms, and subject
-  to these terms, Apple grants you a personal, non-exclusive license, under
-  Apple's copyrights in this original Apple software (the "Apple Software"), to
-  use, reproduce, modify and redistribute the Apple Software, with or without
-  modifications, in source and/or binary forms; provided that if you redistribute
-  the Apple Software in its entirety and without modifications, you must retain
-  this notice and the following text and disclaimers in all such redistributions
-  of the Apple Software.
-  Neither the name, trademarks, service marks or logos of Apple Inc. may be used
-  to endorse or promote products derived from the Apple Software without specific
-  prior written permission from Apple.  Except as expressly stated in this notice,
-  no other rights or licenses, express or implied, are granted by Apple herein,
-  including but not limited to any patent rights that may be infringed by your
-  derivative works or by other works in which the Apple Software may be
-  incorporated.
-
-  The Apple Software is provided by Apple on an "AS IS" basis.  APPLE MAKES NO
-  WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED
-  WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-  PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN
-  COMBINATION WITH YOUR PRODUCTS.
-
-  IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR
-  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
-  GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-  ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, MODIFICATION AND/OR
-  DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF
-  CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF
-  APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-  Copyright (C) 2008 Apple Inc. All Rights Reserved.
-
+/** @file boxRobot.m
+ @brief boxRobotクラス
+ @author Takashi Ogura
+ @date 2009/03/01
+ @version 0.0.1
 */
+
+/*  $Id:$ */
 
 #import <QuartzCore/QuartzCore.h>
 #import <OpenGLES/EAGLDrawable.h>
@@ -56,8 +15,22 @@
 
 @implementation boxRobot
 
-/*
- * 腕／足
+/** 初期化
+ */
+- (id) init
+{
+  frame = 0;
+  dir = 1;
+  neck = 0;
+  return [super init];
+}
+
+/** 腕／足の描画
+ * 
+ * @param girth 太さ
+ * @param length 長さ
+ * @param r1 関節1の角度(deg)
+ * @param r2 関節2の角度(deg)
  */
 - (void) drawArmLeg:(float) girth: (float) length: (float) r1: (float) r2
 {
@@ -69,8 +42,11 @@
 }
 
 
-/*
- * 直方体を描く
+/** 直方体を描く
+ * 
+ * @param x X軸長さ
+ * @param y Y軸長さ
+ * @param z Z軸長さ
  */
 - (void)drawBox:(float)x:(float) y:(float) z
 {
@@ -136,12 +112,13 @@
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-/*
- * 画面表示
+/** drawableObjectクラスで要求される形状の描画
+ * 
+ * 位置はdrawableObjectのpos, rotで決定される
  */
 - (void) drawShape
 {
-  static int frame = 0;                               /* フレーム数 */
+  //  static int frame = 0;                               /* フレーム数 */
 
 //   /* STEPCYCLE に指定した枚数のフレームを描画する間に 0→1 に変化　 */
 //   double t = (frame % STEPCYCLE) / (double)STEPCYCLE;
@@ -169,8 +146,8 @@
   //float px = 0.0, pz = 0.0;      /* 箱男の位置 */
   //float r = 0.0;                 /* 箱男の向き */
   //float h = 0.0;                 /* 箱男の高さ */
-  static GLfloat neck = 0;
-  static GLfloat dir  = 1;
+//   static GLfloat neck = 0;
+//   static GLfloat dir  = 1;
 
   /* フレーム数（画面表示を行った回数）をカウントする */
   ++frame;
@@ -229,6 +206,7 @@
   [self drawArmLeg:0.16: 0.4: ra1: ra2];
   glPopMatrix();
 
+  
 }
 
 @end

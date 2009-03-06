@@ -1,7 +1,21 @@
+/** @file drawableObject.m
+ @brief drawableObjectクラス
+ @author Takashi Ogura
+ @date 2009/03/01
+ @version 0.0.1
+*/
+
+
+/* $Id:$ */
+
 #import "drawableObject.h"
 
 @implementation drawableObject
 
+/** 初期化
+ *
+ * @retval [super init] 
+ */
 - (id)init
 {
 //   pos = (float *)malloc(sizeof(float)*3);
@@ -18,6 +32,12 @@
   return([super init]);
 }
 
+/** 物体の位置を指定する
+ *
+ * @param x X軸位置
+ * @param y Y軸位置
+ * @param z Z軸位置
+ */
 - (void)setPos:(float)x:(float)y:(float)z
 {
   pos[0] = x;
@@ -25,6 +45,14 @@
   pos[2] = z;
 }
 
+
+/** 物体の姿勢を指定する
+ *
+ * @param t 回転角度
+ * @param x 軸1
+ * @param y 軸2
+ * @param z 軸3
+ */
 - (void)setRot:(float)t:(float)x:(float)y:(float)z
 {
   rot[0] = t;
@@ -33,6 +61,12 @@
   rot[3] = z;
 }
 
+/** 描画メソッド
+ *
+ * worldクラスから呼び出される
+ * 位置を指定し、drawShapeメソッドを呼び出し形状を描画する。
+ * OpenGL ESを前提としている。
+ */
 - (void)draw
 {
   glPushMatrix();
@@ -44,9 +78,14 @@
   glPopMatrix();
 }
 
+/** 形状の描画：サブクラスでオーバーライドすること
+ *
+ * サブクラスでオーバーライドされる
+ *
+ */
 - (void)drawShape
 {
-  //このメソッドをオーバーライドしてください
+  //形状の描画：サブクラスでオーバーライドすること
 }
 
 // - (void)dealloc
