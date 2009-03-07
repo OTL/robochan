@@ -1,6 +1,8 @@
 /** @file KHRInterface.m
- * @brief ƒƒ{ƒbƒg‘€ì—pƒCƒ“ƒ^ƒtƒF[ƒX
- *
+ * @brief KHR-2HVã‚’å‹•ã‹ã™ãŸã‚ã®ã‚·ãƒªã‚¢ãƒ«é€šä¿¡ãƒ—ãƒ­ã‚°ãƒ©ãƒ 
+ * @author Tamaki Nishino & Takashi Ogura
+ * @date 2009/03/01
+ * @version 0.0.1
  */
  
 /* $Id:$ */
@@ -11,7 +13,7 @@
 
 @synthesize fd;
 
-/** ƒVƒŠƒAƒ‹ƒ|[ƒg‚Ì‰Šú‰»
+/** ã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆã®åˆæœŸåŒ–
  *
  * 
  */
@@ -21,20 +23,20 @@
   memset(&tio,0,sizeof(tio));
   tio.c_cflag = CS8 | CLOCAL | CREAD;
   tio.c_cc[VTIME] = 0;
-  //tio.c_cc[VMIN] = 100; // ‚±‚ê‚ª•K—v
-  tio.c_cc[VMIN] = 1; // ‚±‚ê‚ª•K—v
-  // ƒ{[ƒŒ[ƒg‚Ìİ’è
+  //tio.c_cc[VMIN] = 100; // ã“ã‚ŒãŒå¿…è¦
+  tio.c_cc[VMIN] = 1; // ã“ã‚ŒãŒå¿…è¦
+  // ãƒœãƒ¼ãƒ¬ãƒ¼ãƒˆã®è¨­å®š
   cfsetispeed(&tio,BAUD_RATE);
   cfsetospeed(&tio,BAUD_RATE);
-  // ƒfƒoƒCƒX‚Éİ’è‚ğs‚¤
+  // ãƒ‡ãƒã‚¤ã‚¹ã«è¨­å®šã‚’è¡Œã†
   tcsetattr(fd,TCSANOW,&tio);
 }
 
 /**
- *  @brief send_buffer[]‚É‚ ‚éƒf[ƒ^‚ğsizeƒoƒCƒg‘—M‚·‚éB
+ *  @brief send_buffer[]ã«ã‚ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’sizeãƒã‚¤ãƒˆé€ä¿¡ã™ã‚‹ã€‚
  *
- * @param size ‘—MƒTƒCƒY(byte)
- * @retval 1 í‚É1‚ğ•Ô‚·
+ * @param size é€ä¿¡ã‚µã‚¤ã‚º(byte)
+ * @retval 1 å¸¸ã«1ã‚’è¿”ã™
  */
 - (int) send:(int)size
 {
@@ -87,7 +89,7 @@
 
     }
   /*     read(fd, receive_buffer, size); */
-  /*     tcflush(fd, TCIFLUSH); // ‘¼‚Í“Ç‚İÌ‚Ä */
+  /*     tcflush(fd, TCIFLUSH); // ä»–ã¯èª­ã¿æ¨ã¦ */
   printf("read finish \n");
   return 1;
 }
@@ -217,15 +219,15 @@
 
 
 /* --------------------------------------------------------------------- */
-/* ƒƒCƒ“                                                                */
+/* ãƒ¡ã‚¤ãƒ³                                                                */
 /* --------------------------------------------------------------------- */
 
 - (KHRInterface *)init
 {
-  // ƒfƒoƒCƒXƒtƒ@ƒCƒ‹iƒVƒŠƒAƒ‹ƒ|[ƒgjƒI[ƒvƒ“
+  // ãƒ‡ãƒã‚¤ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ï¼ˆã‚·ãƒªã‚¢ãƒ«ãƒãƒ¼ãƒˆï¼‰ã‚ªãƒ¼ãƒ—ãƒ³
   fd = open(DEV_NAME,O_RDWR);
   if(fd<0){
-    // ƒfƒoƒCƒX‚Ì open() ‚É¸”s‚µ‚½‚ç
+    // ãƒ‡ãƒã‚¤ã‚¹ã® open() ã«å¤±æ•—ã—ãŸã‚‰
     perror("fail to open device");
   }else{
     [self serial_init];

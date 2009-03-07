@@ -233,8 +233,8 @@
   if (wrld){
     [wrld draw];
   }
-  [self.app setLabelText:[NSString stringWithFormat:@"%d %.3f %.3f %.3f",
-				   wrld.a, wrld.b, wrld.c,wrld.d]];
+//   [self.app setLabelText:[NSString stringWithFormat:@"%d %.3f %.3f %.3f",
+// 				   wrld.a, wrld.b, wrld.c,wrld.d]];
 
   glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
   [context presentRenderbuffer:GL_RENDERBUFFER_OES];

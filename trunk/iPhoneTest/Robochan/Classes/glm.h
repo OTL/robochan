@@ -1,5 +1,6 @@
-/** @file glm.h
- *  @brief objファイルを取り込むためのライブラリ
+/** 
+ *  @file glm.h
+ *  @brief objファイルを取り込むためのライブラリのヘッダファイル
  *
  *  GLM library.  Wavefront .obj file format reader/writer/manipulator.
  *

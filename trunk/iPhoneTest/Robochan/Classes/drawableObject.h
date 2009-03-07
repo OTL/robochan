@@ -1,5 +1,5 @@
 /** @file drawableObject.h
- @brief drawableObjectクラス
+ @brief drawableObjectクラスのヘッダファイル
  @author Takashi Ogura
  @date 2009/03/01
  @version 0.0.1

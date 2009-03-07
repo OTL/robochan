@@ -48,10 +48,10 @@
 
 /** 物体の姿勢を指定する
  *
- * @param t 回転角度
- * @param x 軸1
- * @param y 軸2
- * @param z 軸3
+ * @param [in] t 回転角度
+ * @param [in] x 軸1
+ * @param [in] y 軸2
+ * @param [in] z 軸3
  */
 - (void)setRot:(float)t:(float)x:(float)y:(float)z
 {

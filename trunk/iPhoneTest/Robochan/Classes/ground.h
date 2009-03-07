@@ -1,8 +1,10 @@
-/** @file ground.h
- @brief groundクラス
- @author Takashi Ogura
- @date 2009/03/01
- @version{0.0.1}
+/**
+ * @file ground.h
+ * @brief groundクラスのヘッダファイル
+ *
+ * @author Takashi Ogura
+ * @date 2009/03/01
+ * @version 0.0.1
 */
 
 /*  $Id:$ */
