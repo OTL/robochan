@@ -10,8 +10,8 @@
 
 #import "RobochanAppDelegate.h"
 #import "EAGLView.h"
-#import "world.h"
-#import "KHRInterface.h"
+#import "OTLWorld.h"
+#import "OTLKHRInterface.h"
 
 //#import "set_text.h"
 
@@ -148,7 +148,7 @@
   //ウィンドウの表示
   [window makeKeyAndVisible];
   //[glView drawView];
-  ki = [[KHRInterface alloc] init];
+  ki = [[OTLKHRInterface alloc] init];
 }
 
 

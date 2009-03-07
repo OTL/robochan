@@ -13,7 +13,8 @@
 #import <OpenGLES/ES1/glext.h>
 
 #import "RobochanAppDelegate.h"
-#import "world.h"
+#import "OTLWorld.h"
+
 
 /** @brief EAGLViewクラス
  *
@@ -38,7 +39,7 @@
   /* OpenGL name for the sprite texture */
   //  GLuint spriteTexture;
   /// worldクラスへのポインタ
-  world *wrld;
+  OTLWorld *wrld;
   
   NSTimer *animationTimer;
   NSTimeInterval animationInterval;
@@ -67,6 +68,6 @@
 ///親オブジェクトであるRobochanAppDelegateへのポインタ
 @property (readwrite, retain) RobochanAppDelegate *app;
 ///描画物体を管理するworldクラスへのポインタ
-@property (readwrite, retain) world *wrld;
+@property (readwrite, retain) OTLWorld *wrld;
 
 @end

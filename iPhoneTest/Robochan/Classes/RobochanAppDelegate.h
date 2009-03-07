@@ -11,7 +11,7 @@
 #import <UIKit/UIKit.h>
 
 @class EAGLView;
-@class KHRInterface;
+@class OTLKHRInterface;
 
 /** @brief アプリメインクラス
  *
@@ -24,7 +24,7 @@
   /// 文字列表示（デバッグ用）
   UILabel *label;
   /// ロボット(KHR-2HV)操作インタフェース
-  KHRInterface *ki;
+  OTLKHRInterface *ki;
 }
 
 @property (nonatomic, retain) UIWindow *window;
