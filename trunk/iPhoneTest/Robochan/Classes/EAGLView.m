@@ -11,7 +11,6 @@
 #import <OpenGLES/EAGLDrawable.h>
 
 #import "EAGLView.h"
-#import "world.h"
 
 @interface EAGLView (EAGLViewPrivate)
 
@@ -77,7 +76,7 @@
 - (id)initWithFrame:(CGRect) rect
 {
 
-  self.wrld = [world new];
+  self.wrld = [OTLWorld new];
 
   if((self = [super initWithFrame:rect])) {
     // Get the layer
