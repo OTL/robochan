@@ -1,8 +1,8 @@
 /** @file boxRobot.h
- @brief boxRobotクラス
- @author Takashi Ogura
- @date 2009/03/01
- @version 0.0.1
+ * @brief boxRobotクラスのヘッダファイル
+ * @author Takashi Ogura
+ * @date 2009/03/01
+ * @version 0.0.1
 */
 
 /*  $Id:$ */

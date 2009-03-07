@@ -1,10 +1,12 @@
-/** @file objObject.m
- @brief groundクラス
- 
- @author Takashi Ogura
- @date 2009/03/01
- @version 0.0.1
+/** 
+ * @file objObject.m
+ * @brief objObjectクラスのヘッダファイル
+ *
+ * @author Takashi Ogura
+ * @date 2009/03/01
+ * @version 0.0.1
 */
+
 /*  $Id:$ */
 
 #import "objObject.h"
@@ -32,7 +34,7 @@
  */
 - (void) drawShape
 {
-  glmDraw(model, GLM_NONE);
+  glmDraw(model, GLM_FLAT | GLM_SMOOTH);
 }
 
 /**
@@ -40,7 +42,7 @@
  */
 - (void)dealloc
 {
-  free(model);
+  glmDelete(model);
   [super dealloc];
 }
 

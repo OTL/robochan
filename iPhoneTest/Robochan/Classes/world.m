@@ -1,9 +1,10 @@
-/*
- @file world.m
- @brief アプリメインプログラムのヘッダファイル
- @author Takashi Ogura
- @date 2009/03/01
- @version 0.0.1
+/**
+ * @file world.m
+ * @brief worldクラスのヘッダファイル
+ *
+ * @author Takashi Ogura
+ * @date 2009/03/01
+ * @version 0.0.1
 */
 
 /* $Id:$ */

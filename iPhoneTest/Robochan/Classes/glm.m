@@ -1,8 +1,11 @@
 /**
  * @file glm.m
- * @brief glut�̃T���v����OpenGL ES�p�ɈڐA��������
+ * @brief glutのサンプルをOpenGL ES用に移植したもの
  *
  *  GLM library.  Wavefront .obj file format reader/writer/manipulator.
+ *
+ * @todo glmDrawのオプション関係をOpenGL ES用に書き直したが未検証。かなりあやしい
+ * @todo assert入れるとなぜか落ちる。どこかにNULLあり？
  *
  *  Written by Nate Robins, 1997.
  *  email: ndr@pobox.com
@@ -797,7 +800,7 @@ _glmSecondPass(GLMmodel* model, FILE* file)
 
 /* public functions */
 
-/* glmUnitize: "unitize" a model by translating it to the origin and
+/** glmUnitize: "unitize" a model by translating it to the origin and
  * scaling it to fit in a unit cube around the origin.  Returns the
  * scalefactor used.
  *
@@ -861,7 +864,7 @@ glmUnitize(GLMmodel* model)
   return scale;
 }
 
-/* glmDimensions: Calculates the dimensions (width, height, depth) of
+/** glmDimensions: Calculates the dimensions (width, height, depth) of
  * a model.
  *
  * model      - initialized GLMmodel structure
@@ -904,7 +907,7 @@ glmDimensions(GLMmodel* model, GLfloat* dimensions)
   dimensions[Z] = _glmAbs(maxz) + _glmAbs(minz);
 }
 
-/* glmScale: Scales a model by a given amount.
+/** glmScale: Scales a model by a given amount.
  * 
  * model - properly initialized GLMmodel structure
  * scale - scalefactor (0.5 = half as large, 2.0 = twice as large)
@@ -921,7 +924,7 @@ glmScale(GLMmodel* model, GLfloat scale)
   }
 }
 
-/* glmReverseWinding: Reverse the polygon winding for all polygons in
+/** glmReverseWinding: Reverse the polygon winding for all polygons in
  * this model.  Default winding is counter-clockwise.  Also changes
  * the direction of the normals.
  * 
@@ -967,7 +970,7 @@ glmReverseWinding(GLMmodel* model)
   }
 }
 
-/* glmFacetNormals: Generates facet normals for a model (by taking the
+/** glmFacetNormals: Generates facet normals for a model (by taking the
  * cross product of the two vectors derived from the sides of each
  * triangle).  Assumes a counter-clockwise winding.
  *
@@ -1014,7 +1017,7 @@ glmFacetNormals(GLMmodel* model)
   }
 }
 
-/* glmVertexNormals: Generates smooth vertex normals for a model.
+/** glmVertexNormals: Generates smooth vertex normals for a model.
  * First builds a list of all the triangles each vertex is in.  Then
  * loops through each vertex in the the list averaging all the facet
  * normals of the triangles each vertex is in.  Finally, sets the
@@ -1182,7 +1185,7 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
 }
 
 
-/* glmLinearTexture: Generates texture coordinates according to a
+/** glmLinearTexture: Generates texture coordinates according to a
  * linear projection of the texture map.  It generates these by
  * linearly mapping the vertices onto a square.
  *
@@ -1232,7 +1235,7 @@ glmLinearTexture(GLMmodel* model)
 #endif
 }
 
-/* glmSpheremapTexture: Generates texture coordinates according to a
+/** glmSpheremapTexture: Generates texture coordinates according to a
  * spherical projection of the texture map.  Sometimes referred to as
  * spheremap, or reflection map texture coordinates.  It generates
  * these by using the normal to calculate where that vertex would map
@@ -1309,7 +1312,7 @@ glmSpheremapTexture(GLMmodel* model)
 #endif
 }
 
-/* glmDelete: Deletes a GLMmodel structure.
+/** glmDelete: Deletes a GLMmodel structure.
  *
  * model - initialized GLMmodel structure
  */
@@ -1344,7 +1347,7 @@ glmDelete(GLMmodel* model)
   free(model);
 }
 
-/* glmReadOBJ: Reads a model description from a Wavefront .OBJ file.
+/** glmReadOBJ: Reads a model description from a Wavefront .OBJ file.
  * Returns a pointer to the created object which should be free'd with
  * glmDelete().
  *
@@ -1422,7 +1425,7 @@ glmReadOBJ(char* filename)
   return model;
 }
 
-/* glmWriteOBJ: Writes a model description in Wavefront .OBJ format to
+/** glmWriteOBJ: Writes a model description in Wavefront .OBJ format to
  * a file.
  *
  * model    - initialized GLMmodel structure
@@ -1600,7 +1603,7 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
   fclose(file);
 }
 
-/* glmDraw: Renders the model to the current OpenGL context using the
+/** glmDraw: Renders the model to the current OpenGL context using the
  * mode specified.
  *
  * model    - initialized GLMmodel structure
@@ -1617,156 +1620,148 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
 GLvoid
 glmDraw(GLMmodel* model, GLuint mode)
 {
-  GLuint i;
+  GLuint i, j, k;
   GLMgroup* group;
+  GLfloat v[9]; //< 頂点座標を格納
+  GLfloat n[9]; //< 法線ベクトルを格納
+  GLfloat t[9]; //< テクスチャ座標を格納
 
   //  assert(model);
   //  assert(model->vertices);
 
-//   /* do a bit of warning */
-//   if (mode & GLM_FLAT && !model->facetnorms) {
-//     printf("glmDraw() warning: flat render mode requested "
-// 	   "with no facet normals defined.\n");
-//     mode &= ~GLM_FLAT;
-//   }
-//   if (mode & GLM_SMOOTH && !model->normals) {
-//     printf("glmDraw() warning: smooth render mode requested "
-// 	   "with no normals defined.\n");
-//     mode &= ~GLM_SMOOTH;
-//   }
-//   if (mode & GLM_TEXTURE && !model->texcoords) {
-//     printf("glmDraw() warning: texture render mode requested "
-// 	   "with no texture coordinates defined.\n");
-//     mode &= ~GLM_TEXTURE;
-//   }
-//   if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
-//     printf("glmDraw() warning: flat render mode requested "
-// 	   "and smooth render mode requested (using smooth).\n");
-//     mode &= ~GLM_FLAT;
-//   }
-//   if (mode & GLM_COLOR && !model->materials) {
-//     printf("glmDraw() warning: color render mode requested "
-// 	   "with no materials defined.\n");
-//     mode &= ~GLM_COLOR;
-//   }
-//   if (mode & GLM_MATERIAL && !model->materials) {
-//     printf("glmDraw() warning: material render mode requested "
-// 	   "with no materials defined.\n");
-//     mode &= ~GLM_MATERIAL;
-//   }
-//   if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-//     printf("glmDraw() warning: color and material render mode requested "
-// 	   "using only material mode\n");
-//     mode &= ~GLM_COLOR;
-//   }
-//   if (mode & GLM_COLOR)
-//     glEnable(GL_COLOR_MATERIAL);
-//   if (mode & GLM_MATERIAL)
-//     glDisable(GL_COLOR_MATERIAL);
+  /* do a bit of warning */
+  if (mode & GLM_FLAT && !model->facetnorms) {
+    printf("glmDraw() warning: flat render mode requested "
+	   "with no facet normals defined.\n");
+    mode &= ~GLM_FLAT;
+  }
+  if (mode & GLM_SMOOTH && !model->normals) {
+    printf("glmDraw() warning: smooth render mode requested "
+	   "with no normals defined.\n");
+    mode &= ~GLM_SMOOTH;
+  }
+  if (mode & GLM_TEXTURE && !model->texcoords) {
+    printf("glmDraw() warning: texture render mode requested "
+	   "with no texture coordinates defined.\n");
+    mode &= ~GLM_TEXTURE;
+  }
+  if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
+    printf("glmDraw() warning: flat render mode requested "
+	   "and smooth render mode requested (using smooth).\n");
+    mode &= ~GLM_FLAT;
+  }
+  if (mode & GLM_COLOR && !model->materials) {
+    printf("glmDraw() warning: color render mode requested "
+	   "with no materials defined.\n");
+    mode &= ~GLM_COLOR;
+  }
+  if (mode & GLM_MATERIAL && !model->materials) {
+    printf("glmDraw() warning: material render mode requested "
+	   "with no materials defined.\n");
+    mode &= ~GLM_MATERIAL;
+  }
+  if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
+    printf("glmDraw() warning: color and material render mode requested "
+	   "using only material mode\n");
+    mode &= ~GLM_COLOR;
+  }
+  if (mode & GLM_COLOR)
+    glEnable(GL_COLOR_MATERIAL);
+  if (mode & GLM_MATERIAL)
+    glDisable(GL_COLOR_MATERIAL);
 
 //   glPushMatrix();
-//   glTranslatef(model->position[0], model->position[1], model->position[2]);
+
+  // 現在使ってない
+  glTranslatef(model->position[0], model->position[1], model->position[2]);
 
   //glBegin(GL_TRIANGLES);
   group = model->groups;
-  GLfloat v[9];
-  //GLubyte ind[3]={0,1,3};
-  //GLfloat n[9];
-  int j,k;
+  
+  // クライアントの設定
+  glEnableClientState(GL_VERTEX_ARRAY);
+  if (mode & GLM_SMOOTH)
+  {
+	  glEnableClientState(GL_NORMAL_ARRAY);
+  }
+  if (mode & GLM_TEXTURE)
+  {
+	  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  }
+  
   while (group) {
-/*     if (mode & GLM_MATERIAL) { */
-/*       glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,  */
-/* 		   model->materials[group->material].ambient); */
-/*       glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,  */
-/* 		   model->materials[group->material].diffuse); */
-/*       glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  */
-/* 		   model->materials[group->material].specular); */
-/*        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,  */
-/*   		  model->materials[group->material].shininess); */
-/*     } */
-
-/*     if (mode & GLM_COLOR) { */
-/*       glColor3fv(model->materials[group->material].diffuse); */
-/*     } */
-    glEnableClientState(GL_VERTEX_ARRAY);
-    //glEnableClientState(GL_NORMAL_ARRAY);
+    if (mode & GLM_MATERIAL)
+    {
+	    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,
+                   model->materials[group->material].ambient);
+	    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,
+                   model->materials[group->material].diffuse);
+	    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,
+                   model->materials[group->material].specular);
+	    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,
+                  model->materials[group->material].shininess);
+    } 
+    
+    if (mode & GLM_COLOR) {
+      //glColor3fv(model->materials[group->material].diffuse);
+      glColorPointer(4, GL_FLOAT, 0, model->materials[group->material].diffuse);
+    }
+    
     for (i = 0; i < group->numtriangles; i++) {
-    int index;
-    //for (i = 0; i < 1; i++) {
-      //FILE *f = fopen("/tmp/v.dat", "w");
       for (j = 0; j < 3; j++){
-	for (k = 0; k < 3 ; k++){
-	  index = 3 * T(group->triangles[i]).vindices[j] + k;
-	  //model->vertices[0-2]�ɂ͂Ȃɂ������Ă��Ȃ�
-	  if (index < 3){
-	    v[3*j+k] = 0.0;
-	  }else{
-	    v[3*j+k] = model->vertices[index];
-	  }
-	  //n[3+j+k] = model->normals[3 * T(group->triangles[i]).nindices[j] + k];
-	  //fprintf(f, "%f ", v[3*j+k]);
-	}
+        for (k = 0; k < 3 ; k++){
+          //model->vertices[0-2]にはなにも入っていない
+          v[3*j+k] = model->vertices[3 * T(group->triangles[i]).vindices[j] + k];
+          if (mode & GLM_SMOOTH)
+          {
+            n[3*j+k] = model->normals[3 * T(group->triangles[i]).nindices[j] + k];
+          }
+          if (mode & GLM_TEXTURE)
+          {
+            t[3*j+k] = model->texcoords[2*T(group->triangles[i]).tindices[j]];
+          }
+        }
       }
-      //fclose(f);
-      
-/*       if (mode & GLM_FLAT) */
-      //glNormalPointer(GL_FLOAT, 0, &model->facetnorms[3 * T(group->triangles[i]).findex]);
-      //glNormalPointer(GL_FLOAT, 0, &model->facetnorms[3 * T(group->triangles[i]).findex]);
-      //      glNormalPointer(GL_FLOAT, 0, n);
+
+      if (mode & GLM_FLAT)
+      {
+        glNormalPointer(GL_FLOAT, 0, &model->facetnorms[3 * T(group->triangles[i]).findex]);
+      }
+      /* 法線 */
+      if (mode & GLM_SMOOTH)
+      {
+        glNormalPointer(GL_FLOAT, 0, n);
+      }
+      /* テクスチャ座標 */
+      if (mode & GLM_TEXTURE) 
+      {
+        glTexCoordPointer(2, GL_FLOAT, 0, t);
+      }
+      /* 頂点の描画 */
       glVertexPointer(3, GL_FLOAT, 0, v);
-      glDrawArrays(GL_TRIANGLES, 0, 3); // ����Ŏ���
-      //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, ind);
-/*       glVertexPointer(3, GL_FLOAT, */
-/* 		      0, */
-/* 		      &model->vertices[3 * T(group->triangles[i]).vindices[0]]); */
-      
-/*       glDrawElements(GL_TRIANGLES, 0, 1); */
+      // 描画
+      glDrawArrays(GL_TRIANGLES, 0, 3);
 
-/*       glVertexPointer(3, GL_FLOAT, */
-/* 		      0, */
-/* 		      &model->vertices[3 * T(group->triangles[i]).vindices[1]]); */
-/*       glDrawArrays(GL_TRIANGLES, 0, 1); */
-
-/*       glVertexPointer(3, GL_FLOAT, */
-/* 		      0, */
-/* 		      &model->vertices[3 * T(group->triangles[i]).vindices[2]]); */
-/*       glDrawArrays(GL_TRIANGLES, 0, 1); */
-
-      //glNormal3fv(&model->facetnorms[3 * T(group->triangles[i]).findex]); */
-      
-
-/*       // 1�_�� */
-/*       if (mode & GLM_SMOOTH) */
-/* 	glNormal3fv(&model->normals[3 * T(group->triangles[i]).nindices[0]]); */
-/*       if (mode & GLM_TEXTURE) */
-/* 	glTexCoord2fv(&model->texcoords[2*T(group->triangles[i]).tindices[0]]); */
-
-/*       glVertex3fv(&model->vertices[3 * T(group->triangles[i]).vindices[0]]); */
-
-/*       // 2�_�� */
-/*       if (mode & GLM_SMOOTH) */
-/* 	glNormal3fv(&model->normals[3 * T(group->triangles[i]).nindices[1]]); */
-/*       if (mode & GLM_TEXTURE) */
-/* 	glTexCoord2fv(&model->texcoords[2*T(group->triangles[i]).tindices[1]]); */
-/*       glVertex3fv(&model->vertices[3 * T(group->triangles[i]).vindices[1]]); */
-      
-/*       // 3�_�� */
-/*       if (mode & GLM_SMOOTH) */
-/* 	glNormal3fv(&model->normals[3 * T(group->triangles[i]).nindices[2]]); */
-/*       if (mode & GLM_TEXTURE) */
-/* 	glTexCoord2fv(&model->texcoords[2*T(group->triangles[i]).tindices[2]]); */
-/*       glVertex3fv(&model->vertices[3 * T(group->triangles[i]).vindices[2]]); */
     }
     
     group = group->next;
   }
   glDisableClientState(GL_VERTEX_ARRAY);
-  //glDisableClientState(GL_NORMAL_ARRAY);
+  if (mode & GLM_SMOOTH)
+    {
+      glDisableClientState(GL_NORMAL_ARRAY);
+    }
+  if (mode & GLM_TEXTURE)
+    {
+      glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
   //glEnd();
 
 //   glPopMatrix();
 }
 
+
+/* OpenGL ESでdisplay listがサポートされないため削除 */
 /* glmList: Generates and returns a display list for the model using
  * the mode specified.
  *
@@ -1794,7 +1789,7 @@ glmDraw(GLMmodel* model, GLuint mode)
 //   return list;
 // }
 
-/* glmWeld: eliminate (weld) vectors that are within an epsilon of
+/** glmWeld: eliminate (weld) vectors that are within an epsilon of
  * each other.
  *
  * model      - initialized GLMmodel structure

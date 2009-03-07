@@ -1,9 +1,10 @@
-/** @file ground.m
- @brief groundクラス
- 
- @author Takashi Ogura
- @date 2009/03/01
- @version 0.0.1
+/**
+ * @file ground.m
+ * @brief groundクラス
+ * 
+ * @author Takashi Ogura
+ * @date 2009/03/01
+ * @version 0.0.1
 */
 
 /*  $Id:$ */

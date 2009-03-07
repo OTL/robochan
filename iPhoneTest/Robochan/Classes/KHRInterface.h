@@ -1,5 +1,5 @@
 /** @file KHRInterface.h
- @brief KHR-2HVを動かすためのシリアル通信プログラム
+ @brief KHR-2HVを動かすためのシリアル通信プログラムのヘッダファイル
  @author Tamaki Nishino & Takashi Ogura
  @date 2009/03/01
  @version 0.0.1

@@ -1,27 +1,29 @@
 /**
-   @file main.m
-   @brief RobochanƒƒCƒ“ƒvƒƒOƒ‰ƒ€
-   @author Takashi Ogura
-   @date 2009/03/01
-   @version 0.0.1
+ * @file main.m
+ * @brief Robochanãƒ¡ã‚¤ãƒ³ãƒ—ãƒ­ã‚°ãƒ©ãƒ 
+
+ * @author Takashi Ogura
+ * @date 2009/03/01
+ * @version 0.0.1
 */
 
 /* $Id:$ */
 
 /** \mainpage
  *
- * Robochan‚Æ‚ÍiPod touch‚ÅKHR-2HV‚ğ“®‚©‚·ƒvƒƒWƒFƒNƒg
- * ‚±‚Ìƒ\ƒtƒg‚Í‚»‚ÌiPod touch—pƒ\ƒtƒgƒEƒFƒA‚Å‚·B
- * 
- * 
+ * Robochanã¨ã¯iPod touchã§KHR-2HVã‚’å‹•ã‹ã™ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆ
+ * ã“ã®ã‚½ãƒ•ãƒˆã¯ãã®iPod touchç”¨ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã§ã™ã€‚
+ * - world
+ * - ground
+ * - drawableObject
  */
 
 #import <UIKit/UIKit.h>
 
 int main(int argc, char *argv[]) {
 	
-	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-	int retVal = UIApplicationMain(argc, argv, nil, @"RobochanAppDelegate");
-	[pool release];
-	return retVal;
+  NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+  int retVal = UIApplicationMain(argc, argv, nil, @"RobochanAppDelegate");
+  [pool release];
+  return retVal;
 }
