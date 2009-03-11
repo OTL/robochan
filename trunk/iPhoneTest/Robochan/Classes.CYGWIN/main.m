@@ -73,6 +73,57 @@ void keyboard(unsigned char key, int x, int y)
   [wrld addRandomRobot];
 }
 
+static int pbutton;
+static int px=-1;
+static int py=-1;
+
+void mouse(int button, int state, int x, int y)
+{
+  if ( button == GLUT_LEFT_BUTTON && state == GLUT_DOWN )
+  {
+    pbutton = GLUT_LEFT_BUTTON;
+  }
+  else if ( button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN )
+  {
+    pbutton = GLUT_RIGHT_BUTTON;
+  }
+  if ( state == GLUT_UP )
+  {
+    px = -1;
+    py = -1;
+  }
+}
+
+
+void motion(int x, int y)
+{
+  
+  if (px == -1 && py == -1)
+  {
+    px = x;
+    py = y;
+  }
+  if (pbutton == GLUT_LEFT_BUTTON)
+  {
+    float p[3];
+    [wrld getViewPos:p];
+    p[0] += 0.01 * (x - px);
+    p[1] += -0.01 * (y - py);
+    [wrld setViewPos:p];
+  }
+  else if (pbutton == GLUT_RIGHT_BUTTON)
+  {
+    float p[3];
+    [wrld getViewPos:p];
+    p[2] += 0.05 * (y - py);
+    [wrld setViewPos:p];
+  }
+  px = x;
+  py = y;
+
+  glutPostRedisplay();
+}
+
 int main(int argc, char *argv[])
 {
   glutInit(&argc, argv);
@@ -84,6 +135,8 @@ int main(int argc, char *argv[])
   glutDisplayFunc(display);
   glutIdleFunc(display);
   glutReshapeFunc(resize);
+  glutMouseFunc(mouse);
+  glutMotionFunc(motion);
   glutKeyboardFunc(keyboard);
   init();
   glutMainLoop();
