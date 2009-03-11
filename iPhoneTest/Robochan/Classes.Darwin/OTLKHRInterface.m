@@ -7,11 +7,18 @@
  
 /* $Id:$ */
 
+#define PRINTF(s) {FILE* f=fopen("/var/tmp/robochan.log","a");fprintf(f,"%s\n",s);fclose(f);}
+//#define PRINTF(s) {FILE* f=fopen("/var/tmp/robochan.log","a");fclose(f);}
+//#define PRINTF(s) {}
+
 #import "OTLKHRInterface.h"
 
 @implementation OTLKHRInterface
 
-@synthesize fd;
+- (int)getFd
+{
+  return (fd);
+}
 
 /** シリアルポートの初期化
  *
@@ -19,6 +26,7 @@
  */
 - (void) serial_init
 {
+  PRINTF(__FUNCTION__);
   struct termios tio;
   memset(&tio,0,sizeof(tio));
   tio.c_cflag = CS8 | CLOCAL | CREAD;
@@ -40,6 +48,7 @@
  */
 - (int) send:(int)size
 {
+  PRINTF(__FUNCTION__);
   int i;
   unsigned char sum = 0;
   unsigned char buf[1];
@@ -67,6 +76,7 @@
 
 - (int)receive:(int) size
 {
+  PRINTF(__FUNCTION__);
   int rt = 0;
   int ret = 0;
   int i = 0;
@@ -74,9 +84,12 @@
   printf("target = %d \n", size);
   while ( rt < size )
     {
-      ret = read(fd, receive_buffer, size);
+      PRINTF("read1");
+      ret = read(fd, &receive_buffer[rt], size);
+      PRINTF("read2");
       if ( ret < 0 ){
 	printf ("read error\n");
+	PRINTF("read error");
 	return (-1);
       }
       rt += ret;
@@ -96,6 +109,7 @@
 
 - (int) send_cmd: (unsigned char) command: (int) size: (int) ack_size
 {
+  PRINTF(__FUNCTION__);
   send_buffer[0] = command;
   [self send:size];
   [self receive:ack_size];
@@ -104,6 +118,7 @@
 
 - (int) send_cmd_opt: (unsigned char) command: (unsigned char) option: (int) size: (int) ack_size
 {
+  PRINTF(__FUNCTION__);
   send_buffer[0] = command;
   send_buffer[1] = option;
   [self send:size];
@@ -116,12 +131,14 @@
 
 - (int) get_wakeup_motion
 {
+  PRINTF(__FUNCTION__);
   [self send_cmd:RCB3J_CMD_GET_WAKEUP_MOTION:1:3];
   return 1;
 }
 
 - (int) set_wakeup_motion:(unsigned char) option: (unsigned char) btn: (unsigned char) stp
 {
+  PRINTF(__FUNCTION__);
   send_buffer[2] = btn;
   send_buffer[3] = stp;
   [self send_cmd_opt:RCB3J_CMD_SET_WAKEUP_MOTION:option:4:1];
@@ -131,12 +148,14 @@
 
 - (int) get_dying_motion
 {
+  PRINTF(__FUNCTION__);
   [self send_cmd:RCB3J_CMD_GET_DYING_MOTION:1:4];
   return 1;
 }
 
 - (int) set_dyingp_motion:(unsigned char) option: (unsigned short) lvl: (unsigned char) mtn
 {
+  PRINTF(__FUNCTION__);
   send_buffer[2] = mtn;
   send_buffer[3] = (lvl >> 8) & 0x3;
   send_buffer[4] = lvl & 0xff;
@@ -147,12 +166,14 @@
 
 - (int) get_version
 {
+  PRINTF(__FUNCTION__);
   [self send_cmd:RCB3J_CMD_GET_RCB3J_VERSION:1:65];
   return 1;
 }
 
 - (int) get_soft_sw:(unsigned char) option
 {
+  PRINTF(__FUNCTION__);
   [self send_cmd_opt:RCB3J_CMD_GET_SOFT_SW:option:2:3];
   return 1;
 }
@@ -225,14 +246,19 @@
 - (OTLKHRInterface *)init
 {
   // デバイスファイル（シリアルポート）オープン
+  PRINTF(__FUNCTION__);
   fd = open(DEV_NAME,O_RDWR);
+  PRINTF(__FUNCTION__);
   if(fd<0){
     // デバイスの open() に失敗したら
+    PRINTF(__FUNCTION__);
     perror("fail to open device");
   }else{
+    PRINTF(__FUNCTION__);
     [self serial_init];
     tcflush(fd, TCIOFLUSH);
   }
+  PRINTF(__FUNCTION__);
   return [super init];
 }
 

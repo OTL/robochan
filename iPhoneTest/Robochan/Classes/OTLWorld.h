@@ -7,11 +7,6 @@
 
 /*  $Id:$ */
 
-#import <UIKit/UIKit.h>
-#import <OpenGLES/EAGL.h>
-#import <OpenGLES/ES1/gl.h>
-#import <OpenGLES/ES1/glext.h>
-
 #import "OTLGround.h"
 #import "OTLBoxRobot.h"
 #import "OTLObjObject.h"
@@ -48,8 +43,9 @@
 - (void)setCamera;
 
 
-@property (readwrite) float *viewPos;
-@property (readwrite) float *viewRot;
+/* @property (readwrite) float *viewPos; */
+/* @property (readwrite) float *viewRot; */
+
 // @property (readwrite) int a;
 // @property (readwrite) int e;
 // @property (readwrite) float b;

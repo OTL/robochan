@@ -13,9 +13,13 @@
 
 
 /* includes */
+#ifdef WIN32
+#include <GL/glut.h>
+#else
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
+#endif
 
 #ifndef M_PI
 #define M_PI 3.14159265
@@ -240,8 +244,8 @@ glmDraw(GLMmodel* model, GLuint mode);
  *            GLM_TEXTURE -  render with texture coords
  *            GLM_FLAT and GLM_SMOOTH should not both be specified.  
  */
-GLuint
-glmList(GLMmodel* model, GLuint mode);
+/* GLuint */
+/* glmList(GLMmodel* model, GLuint mode); */
 
 /* glmWeld: eliminate (weld) vectors that are within an epsilon of
  * each other.

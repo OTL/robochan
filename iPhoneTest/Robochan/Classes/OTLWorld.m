@@ -11,11 +11,12 @@
 
 #import "OTLWorld.h"
 #import <stdio.h>
+#import <stdlib.h>
 
 @implementation OTLWorld
 
-@synthesize viewPos;
-@synthesize viewRot;
+// @synthesize viewPos;
+// @synthesize viewRot;
 // @synthesize a;
 // @synthesize b;
 // @synthesize c;

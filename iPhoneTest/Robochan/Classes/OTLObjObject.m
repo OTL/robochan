@@ -1,6 +1,6 @@
 /** 
- * @file objObject.m
- * @brief objObjectクラス
+ * @file OTLObjObject.m
+ * @brief OTLObjObjectクラス
  *
  * @author Takashi Ogura
  * @date 2009/03/01
@@ -23,8 +23,10 @@
 {
   [super init];
   //とりあえずフルパスじゃないとだめっぽい
-  model = glmReadOBJ("/Applications/Robochan.app/hoge.obj");
+  //model = glmReadOBJ("/Applications/Robochan.app/hoge.obj");
+  model = glmReadOBJ("/Applications/Robochan.app/face.obj");
   glmScale(model, 0.3);
+  //glmReverseWinding(model);
   return (self);
 }
 
@@ -34,7 +36,8 @@
  */
 - (void) drawShape
 {
-  glmDraw(model, GLM_FLAT | GLM_SMOOTH);
+  //glmDraw(model, GLM_FLAT | GLM_SMOOTH);
+  glmDraw(model, GLM_SMOOTH | GLM_COLOR);
 }
 
 /**

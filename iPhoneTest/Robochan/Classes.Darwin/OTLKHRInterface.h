@@ -6,8 +6,12 @@
 */
 
 /*  $Id:$ */
-
+#ifdef WIN32
+#import "OTLCygwin.h"
+#else
 #import <Foundation/NSObject.h>
+#endif
+
 #import <stdio.h>
 #import <stdlib.h>
 #import <unistd.h>
@@ -59,7 +63,7 @@
   unsigned char receive_buffer[128];
 }
 
-@property (readonly) int fd;
+//@property (readonly) int fd;
 
 ///ロボットの状態取得
 - (int)getSettings;
