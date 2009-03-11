@@ -26,7 +26,7 @@
  */
 - (void)sendCommand:(id)sender
 {
-  if (ki.fd >= 0){
+  if ([ki getFd] >= 0){
     switch([sender selectedSegmentIndex]){
     case 0:
       break;

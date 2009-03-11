@@ -1,0 +1,32 @@
+# makefile for gcc compiler for Cygwin
+
+TARGET=Robochan
+
+CC = gcc
+LD = $(CC)
+LDFLAGS = -lobjc -lGL -lGLU -lglut
+CFLAGS = -DWIN32 -IClasses.Cygwin -O3 -Wall -std=c99 -funroll-loops
+#LDFLAGS = -DWIN32 -mno-cygwin -mwindows -lglut32 -lglu32 -lopengl32 -lobjc
+#CFLAGS = -DWIN32 -mno-cygwin -mwindows -IClasses.Cygwin -O3 -Wall -std=c99 -funroll-loops
+SRCDIR1=./Classes
+SRCDIR2=./Classes.Cygwin
+CFLAGS += -I$(SRCDIR1) -I$(SRCDIR2)
+RESDIR=./Resources
+OBJS=$(patsubst %.m,%.o,$(wildcard $(SRCDIR1)/*.m))
+OBJS+=$(patsubst %.m,%.o,$(wildcard $(SRCDIR2)/*.m))
+RESOURCES=$(wildcard $(RESDIR)/*)
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	$(LD) -o $@ $^ $(LDFLAGS) 
+
+%.o:	%.m
+	$(CC) -c $(CFLAGS) $< -o $@
+
+%.o:	%.c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+clean:
+	@rm -f $(OBJS)
+	@rm -f $(TARGET)

@@ -7,9 +7,6 @@
 
 /*  $Id:$ */
 
-#import <QuartzCore/QuartzCore.h>
-#import <OpenGLES/EAGLDrawable.h>
-
 #import "OTLBoxRobot.h"
 #import "math.h"
 
