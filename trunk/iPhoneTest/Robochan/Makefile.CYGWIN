@@ -6,7 +6,7 @@ CC = gcc
 LD = $(CC)
 LDFLAGS = -lobjc -lGL -lGLU -lglut
 CFLAGS = -DWIN32 -IClasses.Cygwin -O3 -Wall -std=c99 -funroll-loops
-#LDFLAGS = -DWIN32 -mno-cygwin -mwindows -lglut32 -lglu32 -lopengl32 -lobjc
+#LDFLAGS = -DWIN32 -mwindows -lglut32 -lglu32 -lopengl32 -lobjc
 #CFLAGS = -DWIN32 -mno-cygwin -mwindows -IClasses.Cygwin -O3 -Wall -std=c99 -funroll-loops
 SRCDIR1=./Classes
 SRCDIR2=./Classes.Cygwin
@@ -15,6 +15,7 @@ RESDIR=./Resources
 OBJS=$(patsubst %.m,%.o,$(wildcard $(SRCDIR1)/*.m))
 OBJS+=$(patsubst %.m,%.o,$(wildcard $(SRCDIR2)/*.m))
 RESOURCES=$(wildcard $(RESDIR)/*)
+INSTALLDIR=/Applications/$(TARGET).app/
 
 all:	$(TARGET)
 
@@ -30,3 +31,8 @@ $(TARGET): $(OBJS)
 clean:
 	@rm -f $(OBJS)
 	@rm -f $(TARGET)
+
+install: $(RESOURCES)
+	mkdir -p $(INSTALLDIR)
+	cp $^ $(INSTALLDIR)
+

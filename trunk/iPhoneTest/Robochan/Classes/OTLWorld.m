@@ -117,4 +117,36 @@
   [super dealloc];
 }
 
+- (void)setViewPos:(float *)p
+{
+  for (int i = 0; i<3; i++)
+  {
+    viewPos[i] = p[i];
+  }
+}
+
+- (void)setViewRot:(float *)r
+{
+  for (int i = 0; i<3; i++)
+  {
+    viewRot[i] = r[i];
+  }
+}
+
+- (void)getViewPos:(float *)p
+{
+  for (int i = 0; i<3; i++)
+  {
+    p[i] = viewPos[i];
+  }
+}
+
+- (void)getViewRot:(float *)r
+{
+  for (int i = 0; i<3; i++)
+  {
+    r[i] = viewRot[i];
+  }
+}
+
 @end

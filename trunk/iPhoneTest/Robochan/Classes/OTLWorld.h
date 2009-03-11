@@ -42,6 +42,10 @@
 /// 視点をセットする
 - (void)setCamera;
 
+- (void)setViewPos:(float *)p;
+- (void)setViewRot:(float *)r;
+- (void)getViewPos:(float *)p;
+- (void)getViewRot:(float *)r;
 
 /* @property (readwrite) float *viewPos; */
 /* @property (readwrite) float *viewRot; */
