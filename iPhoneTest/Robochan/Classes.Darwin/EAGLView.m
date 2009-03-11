@@ -265,7 +265,11 @@
       CGPoint p1 = [t1 locationInView:self];
       CGPoint p2 = [t2 locationInView:self];
       multiDistance = [self distanceBetweenTwoPoints:p1 toPoint:p2];
-      wrld.viewPos[2] += 0.05 * (multiDistance - previousDistance);
+      
+      float p[3];
+      [wrld getViewPos:p];
+      p[2] += 0.05 * (multiDistance - previousDistance);
+      [wrld setViewPos:p];
     }
   }
   // シングルタッチ
@@ -280,8 +284,11 @@
     } else {
       location = [touch locationInView:self];
       // Render the stroke
-      wrld.viewPos[0] += 0.01 * (location.x - previousLocation.x);
-      wrld.viewPos[1] += -0.01 * (location.y - previousLocation.y);
+      float p[3];
+      [wrld getViewPos:p];
+      p[0] += 0.01 * (location.x - previousLocation.x);
+      p[1] += -0.01 * (location.y - previousLocation.y);
+      [wrld setViewPos:p];
       //previousLocation = [touch previousLocationInView:self];
     }
   }
