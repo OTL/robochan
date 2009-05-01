@@ -10,8 +10,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class OTLTalkView;
+
 @interface OTLRobochanViewController : UIViewController{
-  UIImageView *imgView;
+  OTLTalkView *talkView;
 }
 
 @end
