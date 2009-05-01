@@ -27,11 +27,9 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
-
-  imgView = [[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 480, 300)];
-  [imgView setImage:[UIImage imageNamed:@"smile.png"]];
-  [self.view addSubview:imgView];
-  [imgView release];
+  talkView = [[OTLTalkView alloc] initWithFrame:CGRectMake(0, 0, 480, 300)];
+  [self.view addSubview:talkView];
+  [talkView release];
 
 //   UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, 320, 30)];
 //   label.font = [UIFont boldSystemFontOfSize:22];
