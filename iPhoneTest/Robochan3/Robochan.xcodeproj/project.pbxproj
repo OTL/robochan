@@ -1,0 +1,377 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		3631C58C0FA96B5800202767 /* smile.png in Resources */ = {isa = PBXBuildFile; fileRef = 3631C58B0FA96B5800202767 /* smile.png */; };
+		3684D4040F9F530A001E227C /* OTLJointTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3684D4030F9F530A001E227C /* OTLJointTestViewController.m */; };
+		368A565C0FA941E200BA651C /* OTLUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 368A565B0FA941E200BA651C /* OTLUIViewController.m */; };
+		36DFC7A20F9DE431007CCDBD /* glm.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC77C0F9DE431007CCDBD /* glm.m */; };
+		36DFC7A30F9DE431007CCDBD /* OTLBoxRobot.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC77E0F9DE431007CCDBD /* OTLBoxRobot.m */; };
+		36DFC7A40F9DE431007CCDBD /* OTLDrawableObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7800F9DE431007CCDBD /* OTLDrawableObject.m */; };
+		36DFC7A50F9DE431007CCDBD /* OTLGround.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7820F9DE431007CCDBD /* OTLGround.m */; };
+		36DFC7A60F9DE431007CCDBD /* OTLObjObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7840F9DE431007CCDBD /* OTLObjObject.m */; };
+		36DFC7A70F9DE431007CCDBD /* OTLWorld.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7860F9DE431007CCDBD /* OTLWorld.m */; };
+		36DFC7AA0F9DE431007CCDBD /* EAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC78E0F9DE431007CCDBD /* EAGLView.m */; };
+		36DFC7AB0F9DE431007CCDBD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC78F0F9DE431007CCDBD /* main.m */; };
+		36DFC7AC0F9DE431007CCDBD /* OTLKHRInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7910F9DE431007CCDBD /* OTLKHRInterface.m */; };
+		36DFC7AD0F9DE431007CCDBD /* OTLNullViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7930F9DE431007CCDBD /* OTLNullViewController.m */; };
+		36DFC7AE0F9DE431007CCDBD /* OTLRobochanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7950F9DE431007CCDBD /* OTLRobochanViewController.m */; };
+		36DFC7AF0F9DE431007CCDBD /* OTLTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7970F9DE431007CCDBD /* OTLTabBarController.m */; };
+		36DFC7B00F9DE431007CCDBD /* OTLTeachViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7990F9DE431007CCDBD /* OTLTeachViewController.m */; };
+		36DFC7B10F9DE431007CCDBD /* OTLTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC79B0F9DE431007CCDBD /* OTLTestViewController.m */; };
+		36DFC7B20F9DE431007CCDBD /* OTLWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC79D0F9DE431007CCDBD /* OTLWindow.m */; };
+		36DFC7B30F9DE431007CCDBD /* RobochanAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC79F0F9DE431007CCDBD /* RobochanAppDelegate.m */; };
+		36DFC7B80F9DE52B007CCDBD /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DFC7B70F9DE52B007CCDBD /* OpenGLES.framework */; };
+		36DFC7BC0F9DE58B007CCDBD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DFC7BB0F9DE58B007CCDBD /* QuartzCore.framework */; };
+		36DFC80F0F9DE7EE007CCDBD /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 36DFC8070F9DE7EE007CCDBD /* Default.png */; };
+		36DFC8100F9DE7EE007CCDBD /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 36DFC8080F9DE7EE007CCDBD /* Icon.png */; };
+		36DFC8110F9DE7EE007CCDBD /* face.mtl in Resources */ = {isa = PBXBuildFile; fileRef = 36DFC8090F9DE7EE007CCDBD /* face.mtl */; };
+		36DFC8120F9DE7EE007CCDBD /* face.obj in Resources */ = {isa = PBXBuildFile; fileRef = 36DFC80A0F9DE7EE007CCDBD /* face.obj */; };
+		36DFC8130F9DE7EE007CCDBD /* hoge.obj in Resources */ = {isa = PBXBuildFile; fileRef = 36DFC80B0F9DE7EE007CCDBD /* hoge.obj */; };
+		36DFC8140F9DE7EE007CCDBD /* mainTabIcon_32.png in Resources */ = {isa = PBXBuildFile; fileRef = 36DFC80C0F9DE7EE007CCDBD /* mainTabIcon_32.png */; };
+		36DFC8150F9DE7EE007CCDBD /* robochanFace.png in Resources */ = {isa = PBXBuildFile; fileRef = 36DFC80D0F9DE7EE007CCDBD /* robochanFace.png */; };
+		36DFC8160F9DE7EE007CCDBD /* teachTabIcon_32.png in Resources */ = {isa = PBXBuildFile; fileRef = 36DFC80E0F9DE7EE007CCDBD /* teachTabIcon_32.png */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D6058910D05DD3D006BFB54 /* Robochan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Robochan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		3631C5070FA9607A00202767 /* OTLRobotInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLRobotInterface.h; sourceTree = "<group>"; };
+		3631C5420FA962D600202767 /* OTLTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLTabBarController.h; sourceTree = "<group>"; };
+		3631C58B0FA96B5800202767 /* smile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile.png; path = Resources/smile.png; sourceTree = "<group>"; };
+		3684D4020F9F530A001E227C /* OTLJointTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLJointTestViewController.h; sourceTree = "<group>"; };
+		3684D4030F9F530A001E227C /* OTLJointTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLJointTestViewController.m; sourceTree = "<group>"; };
+		368A565A0FA941E200BA651C /* OTLUIViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLUIViewController.h; sourceTree = "<group>"; };
+		368A565B0FA941E200BA651C /* OTLUIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLUIViewController.m; sourceTree = "<group>"; };
+		36DFC77B0F9DE431007CCDBD /* glm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glm.h; sourceTree = "<group>"; };
+		36DFC77C0F9DE431007CCDBD /* glm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = glm.m; sourceTree = "<group>"; };
+		36DFC77D0F9DE431007CCDBD /* OTLBoxRobot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLBoxRobot.h; sourceTree = "<group>"; };
+		36DFC77E0F9DE431007CCDBD /* OTLBoxRobot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLBoxRobot.m; sourceTree = "<group>"; };
+		36DFC77F0F9DE431007CCDBD /* OTLDrawableObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLDrawableObject.h; sourceTree = "<group>"; };
+		36DFC7800F9DE431007CCDBD /* OTLDrawableObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLDrawableObject.m; sourceTree = "<group>"; };
+		36DFC7810F9DE431007CCDBD /* OTLGround.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLGround.h; sourceTree = "<group>"; };
+		36DFC7820F9DE431007CCDBD /* OTLGround.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLGround.m; sourceTree = "<group>"; };
+		36DFC7830F9DE431007CCDBD /* OTLObjObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLObjObject.h; sourceTree = "<group>"; };
+		36DFC7840F9DE431007CCDBD /* OTLObjObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLObjObject.m; sourceTree = "<group>"; };
+		36DFC7850F9DE431007CCDBD /* OTLWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLWorld.h; sourceTree = "<group>"; };
+		36DFC7860F9DE431007CCDBD /* OTLWorld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLWorld.m; sourceTree = "<group>"; };
+		36DFC78D0F9DE431007CCDBD /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EAGLView.h; sourceTree = "<group>"; };
+		36DFC78E0F9DE431007CCDBD /* EAGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EAGLView.m; sourceTree = "<group>"; };
+		36DFC78F0F9DE431007CCDBD /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		36DFC7900F9DE431007CCDBD /* OTLKHRInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLKHRInterface.h; sourceTree = "<group>"; };
+		36DFC7910F9DE431007CCDBD /* OTLKHRInterface.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLKHRInterface.m; sourceTree = "<group>"; };
+		36DFC7920F9DE431007CCDBD /* OTLNullViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLNullViewController.h; sourceTree = "<group>"; };
+		36DFC7930F9DE431007CCDBD /* OTLNullViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLNullViewController.m; sourceTree = "<group>"; };
+		36DFC7940F9DE431007CCDBD /* OTLRobochanViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLRobochanViewController.h; sourceTree = "<group>"; };
+		36DFC7950F9DE431007CCDBD /* OTLRobochanViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLRobochanViewController.m; sourceTree = "<group>"; };
+		36DFC7970F9DE431007CCDBD /* OTLTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLTabBarController.m; sourceTree = "<group>"; };
+		36DFC7980F9DE431007CCDBD /* OTLTeachViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLTeachViewController.h; sourceTree = "<group>"; };
+		36DFC7990F9DE431007CCDBD /* OTLTeachViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLTeachViewController.m; sourceTree = "<group>"; };
+		36DFC79A0F9DE431007CCDBD /* OTLTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLTestViewController.h; sourceTree = "<group>"; };
+		36DFC79B0F9DE431007CCDBD /* OTLTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLTestViewController.m; sourceTree = "<group>"; };
+		36DFC79C0F9DE431007CCDBD /* OTLWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLWindow.h; sourceTree = "<group>"; };
+		36DFC79D0F9DE431007CCDBD /* OTLWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLWindow.m; sourceTree = "<group>"; };
+		36DFC79E0F9DE431007CCDBD /* RobochanAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobochanAppDelegate.h; sourceTree = "<group>"; };
+		36DFC79F0F9DE431007CCDBD /* RobochanAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RobochanAppDelegate.m; sourceTree = "<group>"; };
+		36DFC7B70F9DE52B007CCDBD /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		36DFC7BB0F9DE58B007CCDBD /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		36DFC8070F9DE7EE007CCDBD /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
+		36DFC8080F9DE7EE007CCDBD /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
+		36DFC8090F9DE7EE007CCDBD /* face.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = face.mtl; path = Resources/face.mtl; sourceTree = "<group>"; };
+		36DFC80A0F9DE7EE007CCDBD /* face.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = face.obj; path = Resources/face.obj; sourceTree = "<group>"; };
+		36DFC80B0F9DE7EE007CCDBD /* hoge.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hoge.obj; path = Resources/hoge.obj; sourceTree = "<group>"; };
+		36DFC80C0F9DE7EE007CCDBD /* mainTabIcon_32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mainTabIcon_32.png; path = Resources/mainTabIcon_32.png; sourceTree = "<group>"; };
+		36DFC80D0F9DE7EE007CCDBD /* robochanFace.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = robochanFace.png; path = Resources/robochanFace.png; sourceTree = "<group>"; };
+		36DFC80E0F9DE7EE007CCDBD /* teachTabIcon_32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = teachTabIcon_32.png; path = Resources/teachTabIcon_32.png; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
+				36DFC7B80F9DE52B007CCDBD /* OpenGLES.framework in Frameworks */,
+				36DFC7BC0F9DE58B007CCDBD /* QuartzCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* Robochan.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				36DFC7750F9DE431007CCDBD /* Classes */,
+				36DFC78C0F9DE431007CCDBD /* Classes.Darwin */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3631C58B0FA96B5800202767 /* smile.png */,
+				36DFC8070F9DE7EE007CCDBD /* Default.png */,
+				36DFC8080F9DE7EE007CCDBD /* Icon.png */,
+				36DFC8090F9DE7EE007CCDBD /* face.mtl */,
+				36DFC80A0F9DE7EE007CCDBD /* face.obj */,
+				36DFC80B0F9DE7EE007CCDBD /* hoge.obj */,
+				36DFC80C0F9DE7EE007CCDBD /* mainTabIcon_32.png */,
+				36DFC80D0F9DE7EE007CCDBD /* robochanFace.png */,
+				36DFC80E0F9DE7EE007CCDBD /* teachTabIcon_32.png */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				36DFC7BB0F9DE58B007CCDBD /* QuartzCore.framework */,
+				36DFC7B70F9DE52B007CCDBD /* OpenGLES.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		36DFC7750F9DE431007CCDBD /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				36DFC77B0F9DE431007CCDBD /* glm.h */,
+				36DFC77C0F9DE431007CCDBD /* glm.m */,
+				36DFC77D0F9DE431007CCDBD /* OTLBoxRobot.h */,
+				36DFC77E0F9DE431007CCDBD /* OTLBoxRobot.m */,
+				36DFC77F0F9DE431007CCDBD /* OTLDrawableObject.h */,
+				36DFC7800F9DE431007CCDBD /* OTLDrawableObject.m */,
+				36DFC7810F9DE431007CCDBD /* OTLGround.h */,
+				36DFC7820F9DE431007CCDBD /* OTLGround.m */,
+				36DFC7830F9DE431007CCDBD /* OTLObjObject.h */,
+				36DFC7840F9DE431007CCDBD /* OTLObjObject.m */,
+				36DFC7850F9DE431007CCDBD /* OTLWorld.h */,
+				36DFC7860F9DE431007CCDBD /* OTLWorld.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		36DFC78C0F9DE431007CCDBD /* Classes.Darwin */ = {
+			isa = PBXGroup;
+			children = (
+				3631C5420FA962D600202767 /* OTLTabBarController.h */,
+				3631C5070FA9607A00202767 /* OTLRobotInterface.h */,
+				36DFC78D0F9DE431007CCDBD /* EAGLView.h */,
+				36DFC78E0F9DE431007CCDBD /* EAGLView.m */,
+				36DFC78F0F9DE431007CCDBD /* main.m */,
+				36DFC7900F9DE431007CCDBD /* OTLKHRInterface.h */,
+				36DFC7910F9DE431007CCDBD /* OTLKHRInterface.m */,
+				36DFC7920F9DE431007CCDBD /* OTLNullViewController.h */,
+				36DFC7930F9DE431007CCDBD /* OTLNullViewController.m */,
+				36DFC7940F9DE431007CCDBD /* OTLRobochanViewController.h */,
+				36DFC7950F9DE431007CCDBD /* OTLRobochanViewController.m */,
+				36DFC7970F9DE431007CCDBD /* OTLTabBarController.m */,
+				36DFC7980F9DE431007CCDBD /* OTLTeachViewController.h */,
+				36DFC7990F9DE431007CCDBD /* OTLTeachViewController.m */,
+				36DFC79A0F9DE431007CCDBD /* OTLTestViewController.h */,
+				36DFC79B0F9DE431007CCDBD /* OTLTestViewController.m */,
+				36DFC79C0F9DE431007CCDBD /* OTLWindow.h */,
+				36DFC79D0F9DE431007CCDBD /* OTLWindow.m */,
+				36DFC79E0F9DE431007CCDBD /* RobochanAppDelegate.h */,
+				36DFC79F0F9DE431007CCDBD /* RobochanAppDelegate.m */,
+				3684D4020F9F530A001E227C /* OTLJointTestViewController.h */,
+				3684D4030F9F530A001E227C /* OTLJointTestViewController.m */,
+				368A565A0FA941E200BA651C /* OTLUIViewController.h */,
+				368A565B0FA941E200BA651C /* OTLUIViewController.m */,
+			);
+			path = Classes.Darwin;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* Test1 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Test1" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Test1;
+			productName = Test1;
+			productReference = 1D6058910D05DD3D006BFB54 /* Robochan.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Robochan" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* Test1 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36DFC80F0F9DE7EE007CCDBD /* Default.png in Resources */,
+				36DFC8100F9DE7EE007CCDBD /* Icon.png in Resources */,
+				36DFC8110F9DE7EE007CCDBD /* face.mtl in Resources */,
+				36DFC8120F9DE7EE007CCDBD /* face.obj in Resources */,
+				36DFC8130F9DE7EE007CCDBD /* hoge.obj in Resources */,
+				36DFC8140F9DE7EE007CCDBD /* mainTabIcon_32.png in Resources */,
+				36DFC8150F9DE7EE007CCDBD /* robochanFace.png in Resources */,
+				36DFC8160F9DE7EE007CCDBD /* teachTabIcon_32.png in Resources */,
+				3631C58C0FA96B5800202767 /* smile.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				36DFC7A20F9DE431007CCDBD /* glm.m in Sources */,
+				36DFC7A30F9DE431007CCDBD /* OTLBoxRobot.m in Sources */,
+				36DFC7A40F9DE431007CCDBD /* OTLDrawableObject.m in Sources */,
+				36DFC7A50F9DE431007CCDBD /* OTLGround.m in Sources */,
+				36DFC7A60F9DE431007CCDBD /* OTLObjObject.m in Sources */,
+				36DFC7A70F9DE431007CCDBD /* OTLWorld.m in Sources */,
+				36DFC7AA0F9DE431007CCDBD /* EAGLView.m in Sources */,
+				36DFC7AB0F9DE431007CCDBD /* main.m in Sources */,
+				36DFC7AC0F9DE431007CCDBD /* OTLKHRInterface.m in Sources */,
+				36DFC7AD0F9DE431007CCDBD /* OTLNullViewController.m in Sources */,
+				36DFC7AE0F9DE431007CCDBD /* OTLRobochanViewController.m in Sources */,
+				36DFC7AF0F9DE431007CCDBD /* OTLTabBarController.m in Sources */,
+				36DFC7B00F9DE431007CCDBD /* OTLTeachViewController.m in Sources */,
+				36DFC7B10F9DE431007CCDBD /* OTLTestViewController.m in Sources */,
+				36DFC7B20F9DE431007CCDBD /* OTLWindow.m in Sources */,
+				36DFC7B30F9DE431007CCDBD /* RobochanAppDelegate.m in Sources */,
+				3684D4040F9F530A001E227C /* OTLJointTestViewController.m in Sources */,
+				368A565C0FA941E200BA651C /* OTLUIViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Test1_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				PRODUCT_NAME = Robochan;
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Test1_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				PRODUCT_NAME = Test1;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				SDKROOT = iphoneos2.2.1;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = iphoneos2.2.1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Test1" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Robochan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
