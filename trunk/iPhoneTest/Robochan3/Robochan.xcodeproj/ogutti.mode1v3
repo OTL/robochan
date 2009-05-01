@@ -324,7 +324,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>36DE0BF60FAA86A8008D046C</string>
+										<string>36DE0C690FAA9F38008D046C</string>
 										<key>history</key>
 										<array>
 											<string>36DFC7F30F9DE750007CCDBD</string>
@@ -340,7 +340,7 @@
 											<string>36CA5BCB0FA9ADB800948F3E</string>
 											<string>36DE0BB90FAA84B0008D046C</string>
 											<string>36DE0BBA0FAA84B0008D046C</string>
-											<string>36DE0BE00FAA85D0008D046C</string>
+											<string>36DE0BF60FAA86A8008D046C</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -357,8 +357,6 @@
 											<string>3631C56C0FA9649200202767</string>
 											<string>36CA5BCD0FA9ADB800948F3E</string>
 											<string>36DE0B930FAA82FF008D046C</string>
-											<string>36DE0BBC0FAA84B0008D046C</string>
-											<string>36DE0BBD0FAA84B0008D046C</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -416,9 +414,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>36DE0BBF0FAA84B0008D046C</string>
+				<string>36DE0C630FAA9F20008D046C</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>36DE0BC00FAA84B0008D046C</string>
+				<string>36DE0C640FAA9F20008D046C</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -552,10 +550,8 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C78EAAD065D492600B07095</string>
-		<string>1CD10A99069EF8BA00B06720</string>
 		<string>36DFC7E00F9DE65B007CCDBD</string>
-		<string>/Users/ogutti/Documents/Robochan/Robochan.xcodeproj</string>
+		<string>/Users/ogutti/Documents/Robochan3/Robochan.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>5 213 874 676 0 0 1400 1028 </string>
@@ -579,7 +575,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>OTLKHRInterface.m</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -637,7 +633,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>36DFC7E00F9DE65B007CCDBD</string>
-				<string>36DE0BB10FAA83A1008D046C</string>
+				<string>36DE0C650FAA9F20008D046C</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
