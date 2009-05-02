@@ -3,7 +3,7 @@
 //  Robochan
 //
 //  Created by 小倉 崇 on 5/2/09.
-//  Copyright 2009 __MyCompanyName__. All rights reserved.
+//  Copyright 2009 OTL. All rights reserved.
 //
 
 #import "OTLPoseTeachViewController.h"
@@ -13,11 +13,18 @@
 @implementation OTLPoseTeachViewController
 
 
-- (void) scanFiles
+- (void) scanPoseFiles
 {
     fileList = (NSMutableArray *)[[[[NSFileManager defaultManager]
 				     directoryContentsAtPath:DOCUMENTS_FOLDER]
 				    pathsMatchingExtensions:[NSArray arrayWithObjects:@"rp", @"csv",nil]] retain];
+}
+
+
+- (void) reloadData
+{
+  [self.tableView reloadData];
+  self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", [fileList count]];
 }
 
 - (id)initWithRobotInterface:(OTLKHRInterface *)ari
@@ -27,15 +34,16 @@
     //self.view.backgroundColor = [UIColor lightGrayColor];		
     self.title = @"姿勢作成";
     self.tabBarItem.image = [UIImage imageNamed:@"teachTabIcon_32.png"]; 
-    //self.tabBarItem.badgeValue = @"";
 
     // ロボットインタフェースの初期化
-    ri = ari;
+     ri = ari;
     NSLog(@"ri = %d\n", ri);
     [ri retain];
 
     //
-	  [self scanFiles];
+	[self scanPoseFiles];
+  [self reloadData];
+  
   }
 
   return self;
@@ -124,10 +132,8 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	// AnotherViewController *anotherViewController = [[AnotherViewController alloc] initWithNibName:@"AnotherView" bundle:nil];
-	// [self.navigationController pushViewController:anotherViewController];
-	// [anotherViewController release];
+  // KHRに姿勢を送る
+  
 }
 
 
@@ -138,15 +144,32 @@
     return YES;
 }
 
-
+- (void)alertView: (UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+  // buttonIndex == 0 がキャンセルらしい
+  if (buttonIndex != 0){
+    // delete file
+    // ファイルの削除
+    NSError *error;
+    NSString *fname = alertView.message;
+    [[NSFileManager defaultManager] removeItemAtPath:[DOCUMENTS_FOLDER stringByAppendingPathComponent:fname]
+                                             error:&error];
+    // テーブルからの削除
+    [fileList removeObject:fname];
+    // 再描画
+    [self reloadData];
+  }
+}
 
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
+      // messageにファイル名をのせて後で削除してもらっている
+      UIAlertView *delAllert = [[UIAlertView alloc] initWithTitle:@"ファイルを削除します" message:[fileList objectAtIndex:[indexPath row]]                                                                                                                 
+                                                         delegate:self cancelButtonTitle:@"キャンセル" otherButtonTitles:@"削除", nil];
+      [delAllert show];
+    }
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
@@ -157,6 +180,9 @@
 
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+  NSString *title = [fileList objectAtIndex:[fromIndexPath row]];
+  [fileList removeObjectAtIndex:[fromIndexPath row]];
+  [fileList insertObject:title atIndex:[toIndexPath row]];
 }
 
 
@@ -176,27 +202,71 @@
   // ファイルに書き込み
 	NSError *error;
 	NSMutableString *str = @"hoge";
-	NSString *fname = [NSString stringWithFormat: @"Pose%07d.rp", [fileList count]];
-	NSString *fullpath = [DOCUMENTS_FOLDER stringByAppendingPathComponent:fname];
-	[str writeToFile: fullpath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+  
+  // 存在しない名前で姿勢を保存
+  NSString *fname;
+  NSString *fullpath;
+  int fCount = [fileList count];
+  do{
+    fname = [NSString stringWithFormat: @"Pose%07d.rp", fCount];
+    fullpath = [DOCUMENTS_FOLDER stringByAppendingPathComponent:fname];
+    fCount++;
+  }while([[NSFileManager defaultManager] fileExistsAtPath: fullpath]);
+
+  // 書き込み
+  [str writeToFile: fullpath atomically:YES encoding:NSUTF8StringEncoding error:&error];
 		
-   // テーブルを更新
-	[fileList addObject:fname];
-	[self.tableView reloadData];
+  // テーブルを更新
+  [fileList addObject:fname];
+  [self reloadData];
+}
+
+- (void)enterEditMode
+{
+  self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"完了"
+                                            style:UIBarButtonItemStylePlain
+                                            target:self action:@selector(leaveEditMode)]
+                                            autorelease];
+  [self.tableView setEditing:YES animated:YES];
+  [self.tableView beginUpdates];
+}
+
+- (void)setNavigationRightButton
+{
+  self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"並べ替え"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(enterEditMode)]
+                                            autorelease];
+}
+
+- (void)setNavigationLeftButton
+{
+    self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"覚える"
+								    style:UIBarButtonItemStylePlain
+								    target:self
+								    action:@selector(memorizePose)]
+                                             autorelease];
+}
+
+
+- (void)leaveEditMode
+{
+  [self setNavigationRightButton];
+  [self.tableView endUpdates];
+  [self.tableView setEditing:NO animated:YES];
 }
 
 - (void)loadView
 {
   [super loadView];
-  self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"覚える"
-								    style:UIBarButtonItemStylePlain
-								    target:self
-								    action:@selector(memorizePose)]
-					    autorelease];
+
+  [self setNavigationLeftButton];
+  [self setNavigationRightButton];
+ 
   printf("Documents folder is %s \n", [DOCUMENTS_FOLDER UTF8String]);
 	self.tableView.autoresizesSubviews = YES;
-	self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
-	
+	self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);	
 }
 
 - (void)dealloc {
