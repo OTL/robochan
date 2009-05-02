@@ -78,9 +78,9 @@
   if (self = [super initWithNibName:nil bundle:nil])
   {
 		self.view.backgroundColor = [UIColor lightGrayColor];		
-		self.title = @"テスト用";
+		self.title = @"シリアルテスト";
 		self.tabBarItem.image = [UIImage imageNamed:@"teachTabIcon_32.png"]; 
-		self.tabBarItem.badgeValue = @"4";
+		self.tabBarItem.badgeValue = @"開発用";
   }
   return self;
 }
@@ -93,7 +93,7 @@
   label.font = [UIFont boldSystemFontOfSize:22];
   label.backgroundColor = [UIColor lightGrayColor];
   label.textColor = [UIColor blackColor];
-  label.text = @"開発中！";
+  label.text = @"シリアルテスト";
   label.textAlignment = UITextAlignmentCenter;		
   [self.view addSubview:label];
    // セグメントコントロールを追加

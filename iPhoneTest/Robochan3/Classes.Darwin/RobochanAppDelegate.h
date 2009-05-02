@@ -10,7 +10,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class OTLTeachViewController;
+@class OTLGLViewController;
 @class OTLKHRInterface;
 
 /** @brief アプリメインクラス
@@ -21,7 +21,7 @@
   UIWindow *window;
   /// ViewController
   UITabBarController *tabController;
-  OTLTeachViewController *tvController;
+  OTLGLViewController *glController;
   NSArray *controllers;
   OTLKHRInterface *ri;
 }

@@ -14,7 +14,8 @@
 #import "OTLKHRInterface.h"
 #import "OTLTabBarController.h"
 #import "OTLRobochanViewController.h"
-#import "OTLTeachViewController.h"
+#import "OTLGLViewController.h"
+#import "OTLPoseTeachViewController.h"
 #import "OTLNullViewController.h"
 #import "OTLTestViewController.h"
 #import "OTLJointTestViewController.h"
@@ -55,17 +56,22 @@
 
   ri = [[OTLKHRInterface alloc] init];
   tabController =  [[OTLTabBarController alloc] initWithNibName:nil bundle:nil];
-  tvController = [[[OTLTeachViewController alloc] init] autorelease];
+  glController = [[[OTLGLViewController alloc] init] autorelease];
+  UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:
+								  [[[OTLPoseTeachViewController alloc] initWithRobotInterface:ri] autorelease]];
+  
   controllers = [NSArray arrayWithObjects:
                            [[[OTLRobochanViewController alloc] init] autorelease],
-                         tvController,
-                         [[[OTLNullViewController alloc] init] autorelease],
+                         nav,
                          [[[OTLTestViewController alloc] initWithRobotInterface:ri] autorelease],
                          [[[OTLJointTestViewController alloc] initWithRobotInterface:ri] autorelease],
+                         glController,
+                         [[[OTLNullViewController alloc] init] autorelease],
                          nil];
-  
+	[nav release];
   [tabController setViewControllers:controllers animated:NO];
-  [application setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:NO];
+  [tabController setCustomizableViewControllers:controllers];
+  //  [application setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:NO];
 
   // ラベル（デバッグ用？）追加
   //[self addLabel];
@@ -74,7 +80,7 @@
 
   [[UIDevice currentDevice] setOrientation:UIInterfaceOrientationLandscapeRight];
   [window addSubview: tabController.view];
-  [application setStatusBarHidden:NO animated:YES];
+  //[application setStatusBarHidden:NO animated:YES];
   //ウィンドウの表示
   [window makeKeyAndVisible];
   //[glView drawView];
@@ -85,13 +91,13 @@
 // Changes the frame rate when the application is about to be inactive.
 - (void)applicationWillResignActive:(UIApplication *)application {
  	NSLog(@"applicationWillResignActive:");
- 	tvController.glView.animationInterval = 1.0 / 5.0;
+ 	glController.glView.animationInterval = 1.0 / 5.0;
 }
 
 // Resumes the initial frame rate when the application becomes active.
 - (void)applicationDidBecomeActive:(UIApplication *)application {
  	NSLog(@"applicationDidBecomeActive:");
- 	tvController.glView.animationInterval = 1.0 / 60.0;
+ 	glController.glView.animationInterval = 1.0 / 60.0;
 }
 
 // Stops the animation and then releases the window resource.
