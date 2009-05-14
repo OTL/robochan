@@ -4,10 +4,12 @@
  * @date 2009/03/01
  * @version 0.0.1
  */
-
+ 
 /* $Id:$ */
 
-#define PRINTF(s) {FILE* f=fopen("/var/tmp/robochan.log","a");fprintf(f,"%s\n",s);fclose(f);}
+//#define PRINTF(s) {FILE* f=fopen("/var/tmp/robochan.log","a");fprintf(f,"%s\n",s);fclose(f);}
+#define PRINTF(s) {}
+//#define PRINTFD(S,val) {}
 #define PRINTFD(s, val) {FILE* f=fopen("/var/tmp/robochan.log","a");fprintf(f,"%s = %d\n",s,val);fclose(f);}
 //#define PRINTF(s) {FILE* f=fopen("/var/tmp/robochan.log","a");fclose(f);}
 //#define PRINTF(s) {}
@@ -15,6 +17,8 @@
 #import "OTLKHRInterface.h"
 
 @implementation OTLKHRInterface
+
+
 
 - (int)getFd
 {
@@ -59,10 +63,10 @@
   PRINTFD("line", __LINE__);
   write(fd, buf, 1);
   PRINTFD("line", __LINE__);
-  tcflush(fd, TCOFLUSH);
+  //tcflush(fd, TCOFLUSH);
   PRINTFD("line", __LINE__);
   // wait OK
-  usleep(100 * 1000);
+//  usleep(100 * 1000);
   read(fd, buf, 1);
   PRINTFD("line", __LINE__);
   //
@@ -70,13 +74,13 @@
     {
       for( i=0; i < size; i++)
         {
-	  sum += send_buffer[i];
+          sum += send_buffer[i];
         }
       send_buffer[i] = sum;
       PRINTFD("line", __LINE__);
       write(fd, send_buffer, size+1);
       PRINTFD("line", __LINE__);
-      tcflush(fd, TCOFLUSH);
+      //tcflush(fd, TCOFLUSH);
     }
 
   return 1;
@@ -89,10 +93,11 @@
   int ret = 0;
 
   PRINTFD("target", size);
+//      usleep(300 * 1000);
   while ( rt < size )
     {
       PRINTF("read1");
-      usleep(100 * 1000);
+      PRINTF("read12");
       ret = read(fd, &receive_buffer[rt], size - rt);
       PRINTF("read2");
       if ( ret < 0 ){
@@ -234,7 +239,7 @@
     {
       PRINTFD("[%02X]", receive_buffer[i]);
     }
-  printf("\n");
+ // printf("\n");
   return 1;
 }
 
@@ -243,22 +248,34 @@
 /* メイン                                                                */
 /* --------------------------------------------------------------------- */
 
+
+- (void)getHomeAngles
+{
+  int i = 0;
+  [self send_cmd_opt: RCB3J_CMD_GET_HOME: RCB3J_OPT_ACK_ON: 2: 49];
+  for (i = 0; i < dof; i++)
+  {
+    homeAngles[i] = (receive_buffer[2*i] << 8) + receive_buffer[2*i+1];
+  }
+}
+
+
 - (OTLKHRInterface *)init
 {
   // デバイスファイル（シリアルポート）オープン
   PRINTF(__FUNCTION__);
+  dof = 17;
   fd = open(DEV_NAME,O_RDWR | O_NOCTTY);
-  PRINTF(__FUNCTION__);
-  if(fd<0){
+  if(fd < 0){
     // デバイスの open() に失敗したら
-    PRINTF(__FUNCTION__);
+//    NSLog(@"fail to open device\n");
     perror("fail to open device");
   }else{
-    PRINTF(__FUNCTION__);
     [self serial_init];
-    tcflush(fd, TCIOFLUSH);
+    //tcflush(fd, TCIOFLUSH);
   }
-  PRINTF(__FUNCTION__);
+//  [self getHomeAngles];
+  
   return [super init];
 }
 
@@ -270,16 +287,16 @@
 
 - (int)getSettings
 {
-  printf("get RCB3J version : ");
+//  printf("get RCB3J version : ");
   [self get_version];
-  printf("[%s]\n", receive_buffer);
-  printf("get wakeup motion : ");
+//  printf("[%s]\n", receive_buffer);
+//  printf("get wakeup motion : ");
   [self get_wakeup_motion];
   [self print_receive_buffer:3];
-  printf("get dying motion : ");
+//  printf("get dying motion : ");
   [self get_dying_motion];
   [self print_receive_buffer:4];
-  printf("get soft switch : ");
+//  printf("get soft switch : ");
   [self get_soft_sw:(RCB3J_OPT_ACK_ON | RCB3J_OPT_EEPROM)];
   [self print_receive_buffer:3];
   return 0;
@@ -287,21 +304,21 @@
 
 - (int)OO
 {
-  printf("set soft switch all 0\n");
+//  printf("set soft switch all 0\n");
   [self set_soft_sw:(RCB3J_OPT_ACK_ON | RCB3J_OPT_EEPROM):0:0];
   return 0;
 }
 
 - (int)d
 {
-  printf("set soft switch all 0\n");
+//  printf("set soft switch all 0\n");
   [self set_soft_sw:(RCB3J_OPT_ACK_ON | RCB3J_OPT_EEPROM):2:4];
   return 0;
 }
 
 - (int)getAngles
 {
-  printf("get angles\n");
+//  printf("get angles\n");
   [self get_angles];
   [self print_receive_buffer:49];
   return 0;
@@ -310,66 +327,124 @@
 // while(1) ??
 - (int)freeJointAndGetAngles:(int)i
 {
-  printf("free joint and get angle\n");
+//  printf("free joint and get angle\n");
   while(1) {
     [self set_joint_param:RCB3J_OPT_ACK_ON:i:1:
 	    RCB3J_MOT_PARAM_FREE];
     [self get_angles];
     /*                 RCB3J_print_receive_buffer(49); */
-    printf("angle = %d\n",
-	   ((unsigned short)receive_buffer[i*2])*0x100+
-	   ((unsigned short)receive_buffer[i*2+1]));
-    usleep(100*1000);
+//    printf("angle = %d\n",
+//	   ((unsigned short)receive_buffer[i*2])*0x100+
+//	   ((unsigned short)receive_buffer[i*2+1]));
+//    usleep(100*1000);
   }
   return 0;
 }
 
-- (int)setJointAngle:(int)i
+
+#define RCB3J_PARAMSCALE 6000
+
+- (double)param2angle:(unsigned short) param
 {
-  printf("set joint angle\n");
-  [self set_joint_param:RCB3J_OPT_ACK_ON:i:10:30000];
+  return ( ((param - (64 * 256)) / (64 * 256 -1)) * RCB3J_PARAMSCALE);
+}
+
+- (unsigned short)angle2param:(double) ang
+{
+  if ( ang > 180 )
+  {
+    ang = 180;
+  }
+  else if (ang < -180)
+  {
+    ang = -180;
+  }
+  
+  return ((64 * 256) + ((64.0 * 256.0 - 1.0) / RCB3J_PARAMSCALE) * ang);
+}
+
+- (int)getJointAngles:(double *)ang
+{
+  int i = 0;
+  [self send_cmd: RCB3J_CMD_GET_ANGLES: 1: 49];
+  for (i = 0; i < dof; i++)
+  {
+    ang[i] = [self param2angle: (receive_buffer[2*i] << 8 + receive_buffer[2*i+1])];
+  }
   return 0;
 }
 
-- (int)setJointAngle:(double)ang at:(int)id time:(double)tm;
+- (int)getJointAngle:(double *)ang at:(int)i
 {
+  [self send_cmd: RCB3J_CMD_GET_ANGLES: 1: 49];
+  *ang = [self param2angle: (receive_buffer[2*i] << 8) + receive_buffer[2*i+1]];
+  return 0;
+}
+
+- (int)setJointAngles:(double *)ang time:(double)tm
+{
+  unsigned short params[RCB3J_MAX_DOF];
+  
+  send_buffer[2] = 0; // 利用するモーション番号 ( 0 ~ 79)
+  send_buffer[3] = 0; // 利用するポジション番号（RAMなので無関係)
+  
+  send_buffer[4] = [self time2speed:tm]; // 速度の設定
+  
+  // 角度の設定
+  for (int i = 0; i < dof; i++)
+  {
+    params[i] = [self angle2param:ang[i]];
+    send_buffer[5 + 2*i]   = params[i] >> 8;
+    send_buffer[5 + 2*i+1] = params[i] & 0xff;
+  }
+  
+  [self send_cmd_opt:RCB3J_CMD_SET_ALL_JOINT_PARAM :RCB3J_OPT_ACK_ON :53 :1]; // 送信
+  
+  return 0;
+}
+
+- (unsigned char)time2speed:(double)tm
+{
+  unsigned char sp = 1;
+  // 10     -> 100
+  // 10000  ->   1
+  if ( tm > 10000 )
+  {
+    tm = 10000;
+  }
+  else if ( tm < 10 )
+  {
+    tm = 10;
+  }
+  sp = (2000/tm) + 1;
+  
+  return sp;
+}
+
+- (int)setJointAngle:(double)ang at:(int)jointId time:(double)tm;
+{
+//  unsigned short pang = 0;
   unsigned short pang = 0;
-  unsigned short speed = 0;
-  printf("set joint angle\n");
-  // -180 -> 0;
-  //  180 -> 255 * 255
-  if ( ang > 180 )
-    {
-      ang = 180;
-    }
-  else if (ang < -180)
-    {
-      ang = -180;
-    }
 
-  pang = (unsigned short)(255 * 255) / 360 * ang + (255 * 255) / 2;
+  if ( jointId > dof ){
+    perror("out of DoF error\n");
+    return -1;
+  }
   
-  // 100 -> 0xFF;
-  // 10000 -> 0x01;
-  if ( tm < 100 )
-    {
-      tm = 100;
-    }
-  else if ( tm > 10000 )
-    {
-      tm = 10000;
-    }
-
-  speed = (unsigned char) (10000/tm);
-  
-  [self set_joint_param:RCB3J_OPT_ACK_ON:(unsigned char)id:speed:pang];
+//  pang = (unsigned short)((128 * 256 -1) * ( 1.0 / 180) * ang + (128 * 256 -1) / 2.0);
+//  pang = (unsigned short)((64 * 256) + ((64.0 * 256.0 - 1.0) / 90.0) * ang);
+//  pang = homeAngles[jointId] + [self angle2param: ang];
+  pang = [self angle2param: ang];
+  //  pang = (unsigned short)((64 * 256) + ang);
+  PRINTFD("homeAngles[jointId]", homeAngles[jointId]);
+  [self set_joint_param:RCB3J_OPT_ACK_ON :(unsigned char)jointId :(unsigned char)tm : pang];
 
   return 0;
 }
 
 - (int)playMotion:(int)i
 {
-  printf("play motion\n");
+//  printf("play motion\n");
   [self play_motion:RCB3J_OPT_ACK_ON:(i & 0xff)];
   return 0;
 }
@@ -377,6 +452,8 @@
 - (void)dealloc
 {
   close(fd);
+  PRINTF("CLOSE!!\n");
+//  NSLog(@"close interface\n");
   [super dealloc];
 }
 

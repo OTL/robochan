@@ -6,11 +6,8 @@
 */
 
 /*  $Id:$ */
-#ifdef WIN32
-#import "OTLCygwin.h"
-#else
-#import <Foundation/NSObject.h>
-#endif
+
+#import <Foundation/Foundation.h>
 
 #import "OTLRobotInterface.h"
 
@@ -24,6 +21,8 @@
 
 #define DEV_NAME    "/dev/tty.iap"        //< デバイスファイル名
 #define BAUD_RATE    B115200              //< RS232C通信ボーレート
+
+#define RCB3J_MAX_DOF 24
 
 #define RCB3J_OPT_ACK_ON 1
 #define RCB3J_OPT_EEPROM 2
@@ -40,10 +39,11 @@
 #define RCB3J_CMD_GET_DYING_MOTION 0xeb
 #define RCB3J_CMD_SET_DYING_MOTION 0xec
 #define RCB3J_CMD_GET_RCB3J_VERSION 0xff
+#define RCB3J_CMD_GET_ANGLES 0xf0
 #define RCB3J_CMD_GET_SOFT_SW 0xf1
 #define RCB3J_CMD_SET_SOFT_SW 0xf2
 #define RCB3J_CMD_PLAY_MOTION 0xf4
-#define RCB3J_CMD_GET_ANGLES 0xf0
+#define RCB3J_CMD_GET_HOME 0xf9
 #define RCB3J_CMD_SET_JOINT_PARAM 0xfe
 #define RCB3J_CMD_SET_ALL_JOINT_PARAM 0xfd
 #define RCB3J_CMD_GET_ALL_JOINT_PARAM 0xfc
@@ -59,10 +59,13 @@
 @interface OTLKHRInterface : NSObject <OTLRobotInterface>{
   /// USARTファイルディスクリプタ
   int fd;
+  // 自由度
+  int dof;
   /// 送信用バッファ
   unsigned char send_buffer[128];
   /// 受信用バッファ
   unsigned char receive_buffer[128];
+  unsigned short homeAngles[RCB3J_MAX_DOF];
 }
 
 //@property (readonly) int fd;
@@ -72,12 +75,14 @@
 - (int)OO;
 - (int)d;
 ///ロボットの関節角度取得
-- (int)getAngles;
+//- (int)getAngles;
 ///サーボオフの関節の現在角度を取得する
 - (int)freeJointAndGetAngles:(int)i;
 ///ロボットの関節角度を指定する
-- (int)setJointAngle:(int)i;
+//- (int)setJointAngle:(int)i;
 ///プリセットモーションを再生する
 - (int)playMotion:(int)i;
 - (int)getFd;
+- (unsigned char)time2speed:(double)tm;
+
 @end

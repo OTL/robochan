@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "OTLTabBarController.h"
-
 @class OTLKHRInterface;
 
 @interface OTLUIViewController : UIViewController {
