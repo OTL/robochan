@@ -7,7 +7,6 @@
 */
 
 /* $Id:$ */
-
 #import "RobochanAppDelegate.h"
 //#import "EAGLView.h"
 //#import "OTLWorld.h"
@@ -27,7 +26,7 @@
 
 @synthesize window;
 @synthesize tabController;
-
+@synthesize ri;
 
 // - (void)addLabel
 // {
@@ -69,6 +68,12 @@
                          [[[OTLNullViewController alloc] init] autorelease],
                          nil];
 	[nav release];
+
+  // TEST
+//  init();
+//  RCB3J_play_motion(RCB3J_OPT_ACK_ON, (((int)2) & 0xff));
+//  close(fd);
+
   [tabController setViewControllers:controllers animated:NO];
   [tabController setCustomizableViewControllers:controllers];
   //  [application setStatusBarStyle:UIStatusBarStyleBlackTranslucent animated:NO];
@@ -107,6 +112,7 @@
 // 	[glView stopAnimation];
 	[window release];
   [controllers release];
+  [ri release];
 // 	[label release];
 	[super dealloc];
 }

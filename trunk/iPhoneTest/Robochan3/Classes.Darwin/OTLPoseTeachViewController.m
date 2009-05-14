@@ -195,14 +195,17 @@
 }
 
 
-- (void)memorizePose
+- (void)memorizeRobotPose
 {
   // 姿勢をゲット
-  
+  double angles[24];
+  [ri getJointAngles:angles];
   // ファイルに書き込み
 	NSError *error;
-	NSMutableString *str = @"hoge";
-  
+	NSString *str = [NSString stringWithFormat: @"%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",   angles[0], angles[1],  angles[2],
+    angles[3],    angles[4],    angles[5],    angles[6],    angles[7],    angles[8],    angles[9],    angles[10],
+    angles[11], angles[12],angles[13],angles[14],angles[15],angles[16]];
+    
   // 存在しない名前で姿勢を保存
   NSString *fname;
   NSString *fullpath;
@@ -245,7 +248,7 @@
     self.navigationItem.leftBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"覚える"
 								    style:UIBarButtonItemStylePlain
 								    target:self
-								    action:@selector(memorizePose)]
+								    action:@selector(memorizeRobotPose)]
                                              autorelease];
 }
 

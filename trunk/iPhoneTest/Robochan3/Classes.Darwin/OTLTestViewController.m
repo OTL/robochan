@@ -28,11 +28,11 @@
       [ri getSettings];
       break;
     case 2:
-      [ri playMotion:0];
-    case 3:
       [ri playMotion:1];
+    case 3:
+        [ri playMotion:2];
     case 4:
-      [ri getAngles];
+        [ri playMotion:0];
     default:
       break;
     }
@@ -50,12 +50,11 @@
 				  [NSArray arrayWithObjects:
 					   @"connect",
 					   @"gs",
-					   @"p 0",
-					   @"p 1 ",
+					   @"p 1",
+					   @"p 2",
 					   @"a ",
 					   nil]];
   // Compute a rectangle that is positioned correctly for the segmented control you'll use as a brush color palette
-  CGRect rect = [[UIScreen mainScreen] bounds];
   CGRect frame = CGRectMake(10,50,300,50);
   segmentedControl.frame = frame;
   // When the user chooses a color, the method changeBrushColor: is called.

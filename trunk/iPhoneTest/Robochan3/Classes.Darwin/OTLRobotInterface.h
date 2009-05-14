@@ -11,10 +11,10 @@
 @protocol  OTLRobotInterface
 - (int)setJointAngle:(double)ang at:(int)id time:(double)tm;
 - (int)setJointAngles:(double *)ang time:(double)tm;
-- (int)getJointAngle:(double *)ang at:(int)id;
+- (int)getJointAngle:(double *)ang at:(int)i;
 - (int)getJointAngles:(double *)ang;
-- (int)setJointServo:(int)onoff at:(int)id ;
-- (int)getJointServo:(int *)onoff at:(int)id ;
+- (int)setJointServo:(int)onoff at:(int)i ;
+- (int)getJointServo:(int *)onoff at:(int)i ;
 - (int)setJointServos:(int *)onoff;
 - (int)getJointServos:(int *)onoff;
 @end

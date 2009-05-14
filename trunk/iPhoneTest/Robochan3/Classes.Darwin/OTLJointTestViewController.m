@@ -41,7 +41,7 @@ numberOfRowsInComponent:(NSInteger)component
     ret = 18;
     break;
   case 1:
-    ret = 18;
+    ret = 19;
     break;
   default:
     ret = 10;
@@ -62,7 +62,7 @@ numberOfRowsInComponent:(NSInteger)component
     str = [NSString stringWithFormat:@"Ang %d", ((row - 9) * 10)];
     break;
   default:
-    str = [NSString stringWithFormat:@"%d [ms]", row * 100];
+    str = [NSString stringWithFormat:@"%d [ms]", (1 + row) * 100];
     break;
   }
 }
@@ -76,10 +76,12 @@ numberOfRowsInComponent:(NSInteger)component
 - (void)setJoint:(id)sender
 {
   
-  [ri setJointAngle:(([pickerView selectedRowInComponent:1] - 9) * 10)
-      at:[pickerView selectedRowInComponent:0]
-      time: [pickerView selectedRowInComponent:0] * 100];
-}
+  [ri setJointAngle:(double)(([pickerView selectedRowInComponent:1] - 9) * 10)
+                 at:(int)[pickerView selectedRowInComponent:0]
+               time: (double)(1 + [pickerView selectedRowInComponent:2]) * 100];
+
+//  [ri setJointAngle:(int)[pickerView selectedRowInComponent:0]];
+ }
 
 
 /**
@@ -92,10 +94,11 @@ numberOfRowsInComponent:(NSInteger)component
     [[UISegmentedControl alloc] initWithItems:
 				  [NSArray arrayWithObjects:
 					     @"setJoint",
-					   nil]];
+               @"dummy",
+   					   nil]];
   // Compute a rectangle that is positioned correctly for the segmented control you'll use as a brush color palette
   CGRect rect = [[UIScreen mainScreen] bounds];
-  CGRect frame = CGRectMake(400,50,60,50);
+  CGRect frame = CGRectMake(340,50,120,50);
   segmentedControl.frame = frame;
   // When the user chooses a color, the method changeBrushColor: is called.
   [segmentedControl addTarget:self action:@selector(setJoint:)
