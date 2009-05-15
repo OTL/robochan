@@ -75,11 +75,17 @@ numberOfRowsInComponent:(NSInteger)component
 
 - (void)setJoint:(id)sender
 {
-  
-  [ri setJointAngle:(double)(([pickerView selectedRowInComponent:1] - 9) * 10)
-                 at:(int)[pickerView selectedRowInComponent:0]
-               time: (double)(1 + [pickerView selectedRowInComponent:2]) * 100];
-
+  switch([sender selectedSegmentIndex])
+  {
+    case 0:
+      [ri setJointAngle:(double)(([pickerView selectedRowInComponent:1] - 9) * 10)
+                     at:(int)[pickerView selectedRowInComponent:0]
+                   time: (double)(1 + [pickerView selectedRowInComponent:2]) * 100];
+      break;
+    case 1:
+      [ri setJointServo:0 at:(int)[pickerView selectedRowInComponent:0]];
+      break;
+  }
 //  [ri setJointAngle:(int)[pickerView selectedRowInComponent:0]];
  }
 
@@ -94,10 +100,11 @@ numberOfRowsInComponent:(NSInteger)component
     [[UISegmentedControl alloc] initWithItems:
 				  [NSArray arrayWithObjects:
 					     @"setJoint",
-               @"dummy",
+               @"servo off",
    					   nil]];
+  segmentedControl.momentary = YES;
+    
   // Compute a rectangle that is positioned correctly for the segmented control you'll use as a brush color palette
-  CGRect rect = [[UIScreen mainScreen] bounds];
   CGRect frame = CGRectMake(340,50,120,50);
   segmentedControl.frame = frame;
   // When the user chooses a color, the method changeBrushColor: is called.
@@ -107,7 +114,7 @@ numberOfRowsInComponent:(NSInteger)component
   // Make sure the color of the color complements the black background
   segmentedControl.tintColor = [UIColor darkGrayColor];
   // Set the third color (index values start at 0)
-  segmentedControl.selectedSegmentIndex = 0;
+//  segmentedControl.selectedSegmentIndex = 0;
 	
   // Add the control to the window
   [self.view addSubview:segmentedControl];

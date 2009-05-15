@@ -7,14 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@class OTLKHRInterface;
+#import "OTLKHRInterface.h"
 
 @interface OTLPoseTeachViewController : UITableViewController <UIAlertViewDelegate> {
   NSMutableArray *fileList;
   OTLKHRInterface *ri;
 }
 
-- (id)initWithRobotInterface:(OTLKHRInterface *)ari;
-
+@property (readwrite,retain) OTLKHRInterface *ri;
 @end

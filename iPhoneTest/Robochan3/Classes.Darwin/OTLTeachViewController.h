@@ -10,10 +10,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import "OTLUIViewController.h"
+
 /** @brief
  *
  */
-@interface OTLTeachViewController : UIViewController{
+@interface OTLTeachViewController : OTLUIViewController{
 }
 
 @end

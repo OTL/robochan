@@ -16,4 +16,6 @@
 
 - (id)initWithRobotInterface:(OTLKHRInterface *)ari;
 
+@property (readwrite, retain) OTLKHRInterface *ri;
+
 @end

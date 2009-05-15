@@ -10,12 +10,13 @@
 
 @implementation OTLUIViewController
 
+@synthesize ri;
+
 - (id)initWithRobotInterface:(OTLKHRInterface *)ari
 {
   self = [self init];
-  ri = ari;
+  self.ri = ari;
   NSLog(@"ri = %d\n", ri);
-  [ri retain];
 
   return (self);
 }

@@ -1,6 +1,6 @@
 /** 
  @file OTLRobochanViewController.h
- @brief ������Ԃŕ\������View
+ @brief èâä˙èÛë‘Ç≈ï\é¶Ç∑ÇÈView
  @author Takashi Ogura
  @date 2009/03/01
  @version 0.0.1
@@ -9,11 +9,12 @@
 /* $Id:$ */
 
 #import <UIKit/UIKit.h>
+#import "OTLUIViewController.h"
 
-/** @brief ������Ԃŕ\������ViewController�N���X
+/** @brief èâä˙èÛë‘Ç≈ï\é¶Ç∑ÇÈViewControllerÉNÉâÉX
  *
  */
-@interface OTLNullViewController : UIViewController{
+@interface OTLNullViewController : OTLUIViewController{
 	IBOutlet UITextField *hoge;
 }
 

@@ -20,22 +20,24 @@
  */
 - (void)sendCommand:(id)sender
 {
-  if ([ri getFd] >= 0){
-    switch([sender selectedSegmentIndex]){
-    case 0:
-      break;
-    case 1:
-      [ri getSettings];
-      break;
-    case 2:
-      [ri playMotion:1];
-    case 3:
-        [ri playMotion:2];
-    case 4:
-        [ri playMotion:0];
-    default:
-      break;
+  switch([sender selectedSegmentIndex]){
+  case 0:
+    [ri serialInit];
+    break;
+  case 1:
+    for (int i = 0; i< ri.dof; i++)
+    {
+      [ri setJointServo:0 at:i];
     }
+    break;
+  case 2:
+    [ri playMotion:1];
+  case 3:
+      [ri playMotion:2];
+  case 4:
+      [ri playMotion:0];
+  default:
+    break;
   }
 }
 
@@ -49,11 +51,12 @@
     [[UISegmentedControl alloc] initWithItems:
 				  [NSArray arrayWithObjects:
 					   @"connect",
-					   @"gs",
+					   @"servo off",
 					   @"p 1",
 					   @"p 2",
-					   @"a ",
+					   @"p 0",
 					   nil]];
+  segmentedControl.momentary = YES;
   // Compute a rectangle that is positioned correctly for the segmented control you'll use as a brush color palette
   CGRect frame = CGRectMake(10,50,300,50);
   segmentedControl.frame = frame;
@@ -64,7 +67,7 @@
   // Make sure the color of the color complements the black background
   segmentedControl.tintColor = [UIColor darkGrayColor];
   // Set the third color (index values start at 0)
-  segmentedControl.selectedSegmentIndex = 0;
+//  segmentedControl.selectedSegmentIndex = 0;
 	
   // Add the control to the window
   [self.view addSubview:segmentedControl];

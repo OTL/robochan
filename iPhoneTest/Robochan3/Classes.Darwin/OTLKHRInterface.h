@@ -29,6 +29,8 @@
 #define RCB3J_OPT_FORCE_PLAY 4
 
 #define RCB3J_MOT_PARAM_NOTRING    0
+#define RCB3J_MOT_PARAM_ANGLE_MAX  32767
+#define RCB3J_MOT_PARAM_ANGLE_CENTER  (64 * 256)
 #define RCB3J_MOT_PARAM_TTL_L      32768
 #define RCB3J_MOT_PARAM_TTL_H      32769
 #define RCB3J_MOT_PARAM_FREE       32770
@@ -66,23 +68,24 @@
   /// 受信用バッファ
   unsigned char receive_buffer[128];
   unsigned short homeAngles[RCB3J_MAX_DOF];
+  BOOL isConnected;
 }
 
 //@property (readonly) int fd;
+
+@property (readonly) int dof;
+@property (readonly) BOOL isConnected;
 
 ///ロボットの状態取得
 - (int)getSettings;
 - (int)OO;
 - (int)d;
-///ロボットの関節角度取得
-//- (int)getAngles;
-///サーボオフの関節の現在角度を取得する
-- (int)freeJointAndGetAngles:(int)i;
 ///ロボットの関節角度を指定する
 //- (int)setJointAngle:(int)i;
 ///プリセットモーションを再生する
 - (int)playMotion:(int)i;
-- (int)getFd;
 - (unsigned char)time2speed:(double)tm;
-
+- (BOOL)serialInit;
+- (BOOL)setJointServoOffAll;
+- (BOOL)checkConnection;
 @end

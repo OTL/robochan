@@ -9,17 +9,17 @@
 #import "OTLPoseTeachViewController.h"
 
 #define DOCUMENTS_FOLDER [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]
+//#define DOCUMENTS_FOLDER [@"/var/root/" stringByAppendingPathComponent:@"Documents"]
 
 @implementation OTLPoseTeachViewController
 
+@synthesize ri;
 
 - (void) scanPoseFiles
 {
-    fileList = (NSMutableArray *)[[[[NSFileManager defaultManager]
-				     directoryContentsAtPath:DOCUMENTS_FOLDER]
-				    pathsMatchingExtensions:[NSArray arrayWithObjects:@"rp", @"csv",nil]] retain];
+  fileList = (NSMutableArray *)[[[[NSFileManager defaultManager] directoryContentsAtPath: DOCUMENTS_FOLDER]
+                                   pathsMatchingExtensions:[NSArray arrayWithObjects:@"rp", @"csv",nil]] retain];
 }
-
 
 - (void) reloadData
 {
@@ -27,7 +27,7 @@
   self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", [fileList count]];
 }
 
-- (id)initWithRobotInterface:(OTLKHRInterface *)ari
+- (id)init
 {
   if (self = [super initWithNibName:nil bundle:nil])
   {
@@ -35,12 +35,7 @@
     self.title = @"姿勢作成";
     self.tabBarItem.image = [UIImage imageNamed:@"teachTabIcon_32.png"]; 
 
-    // ロボットインタフェースの初期化
-     ri = ari;
-    NSLog(@"ri = %d\n", ri);
-    [ri retain];
-
-    //
+   //
 	[self scanPoseFiles];
   [self reloadData];
   
@@ -72,11 +67,14 @@
     [super viewWillAppear:animated];
 }
 */
-/*
+
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+  [super viewDidAppear:animated];
+   // 全軸フリーにする
+  NSLog(@"PoseTeach ri = %d\n", ri);
+  [ri setJointServoOffAll];
 }
-*/
+
 /*
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
@@ -130,10 +128,23 @@
     return cell;
 }
 
-
+#include "stdio.h"
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  double angles[RCB3J_MAX_DOF];
+      
+  // ファイル名を取得
+  NSString *fname = [fileList objectAtIndex:[indexPath row]];
+  NSString *path = [DOCUMENTS_FOLDER stringByAppendingPathComponent:fname];
+  // ファイルからdouble angles[24]を取得
+  const char *cpath = [path UTF8String];
+  FILE *fd = fopen(cpath,"r");
+  fscanf(fd, "%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+                   &angles[0], &angles[1],  &angles[2],  &angles[3], &angles[4], &angles[5], &angles[6], &angles[7], &angles[8], &angles[9],
+                   &angles[10],&angles[11],&angles[12],&angles[13],&angles[14],&angles[15],&angles[16],&angles[17],&angles[18],&angles[19],
+                   &angles[20],&angles[21],&angles[22],&angles[23]);
+  fclose(fd);
   // KHRに姿勢を送る
-  
+  [ri setJointAngles:angles time: 500];
 }
 
 
@@ -152,12 +163,15 @@
     // ファイルの削除
     NSError *error;
     NSString *fname = alertView.message;
-    [[NSFileManager defaultManager] removeItemAtPath:[DOCUMENTS_FOLDER stringByAppendingPathComponent:fname]
-                                             error:&error];
-    // テーブルからの削除
-    [fileList removeObject:fname];
-    // 再描画
-    [self reloadData];
+    if ( fname != nil)
+    {
+      [[NSFileManager defaultManager] removeItemAtPath:[DOCUMENTS_FOLDER stringByAppendingPathComponent:fname]
+                                                 error:&error];
+      // テーブルからの削除
+      [fileList removeObject:fname];
+      // 再描画
+      [self reloadData];
+    }
   }
 }
 
@@ -166,8 +180,8 @@
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
       // messageにファイル名をのせて後で削除してもらっている
-      UIAlertView *delAllert = [[UIAlertView alloc] initWithTitle:@"ファイルを削除します" message:[fileList objectAtIndex:[indexPath row]]                                                                                                                 
-                                                         delegate:self cancelButtonTitle:@"キャンセル" otherButtonTitles:@"削除", nil];
+      UIAlertView *delAllert = [[[UIAlertView alloc] initWithTitle:@"ファイルを削除します" message:[fileList objectAtIndex:[indexPath row]]                                                                                                                 
+                                                         delegate:self cancelButtonTitle:@"キャンセル" otherButtonTitles:@"削除", nil] autorelease];
       [delAllert show];
     }
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
@@ -194,18 +208,33 @@
     return YES;
 }
 
+- (void)showAlertWithMessage:(NSString *)str
+{
+  UIAlertView *errorAlert = [[UIAlertView alloc] initWithTitle:@"msg" message:str delegate:self cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+  [errorAlert show];
+  [errorAlert release];
+}
 
 - (void)memorizeRobotPose
 {
   // 姿勢をゲット
-  double angles[24];
+  double angles[RCB3J_MAX_DOF];
+  BOOL successWrite = YES;
+  
+  // 全軸フリーにする
+  [ri setJointServoOffAll];
+  // 角度取得
   [ri getJointAngles:angles];
+
   // ファイルに書き込み
 	NSError *error;
-	NSString *str = [NSString stringWithFormat: @"%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f",   angles[0], angles[1],  angles[2],
-    angles[3],    angles[4],    angles[5],    angles[6],    angles[7],    angles[8],    angles[9],    angles[10],
-    angles[11], angles[12],angles[13],angles[14],angles[15],angles[16]];
-    
+  // ありえねー。 NSData? NSCoder?
+
+	NSString *str = [NSString stringWithFormat: @"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf",
+                   angles[0], angles[1],  angles[2],  angles[3], angles[4], angles[5], angles[6], angles[7], angles[8], angles[9],
+                   angles[10],angles[11],angles[12],angles[13],angles[14],angles[15],angles[16],angles[17],angles[18],angles[19],
+                   angles[20],angles[21],angles[22],angles[23]];
+  
   // 存在しない名前で姿勢を保存
   NSString *fname;
   NSString *fullpath;
@@ -215,10 +244,14 @@
     fullpath = [DOCUMENTS_FOLDER stringByAppendingPathComponent:fname];
     fCount++;
   }while([[NSFileManager defaultManager] fileExistsAtPath: fullpath]);
-
+  
   // 書き込み
-  [str writeToFile: fullpath atomically:YES encoding:NSUTF8StringEncoding error:&error];
-		
+  successWrite = [str writeToFile: fullpath atomically:YES encoding:NSUTF8StringEncoding error:&error];
+  if ( !successWrite )
+  {
+    [self showAlertWithMessage:@"fail to write file"];
+  }
+  
   // テーブルを更新
   [fileList addObject:fname];
   [self reloadData];
@@ -267,7 +300,7 @@
   [self setNavigationLeftButton];
   [self setNavigationRightButton];
  
-  printf("Documents folder is %s \n", [DOCUMENTS_FOLDER UTF8String]);
+  NSLog(@"Documents folder is %s \n", [DOCUMENTS_FOLDER UTF8String]);
 	self.tableView.autoresizesSubviews = YES;
 	self.tableView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);	
 }
