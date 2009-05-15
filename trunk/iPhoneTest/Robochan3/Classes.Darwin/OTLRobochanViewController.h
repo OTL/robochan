@@ -10,9 +10,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class OTLTalkView;
+#import "OTLTalkView.h"
+#import "OTLUIViewController.h"
 
-@interface OTLRobochanViewController : UIViewController{
+@interface OTLRobochanViewController : OTLUIViewController{
   OTLTalkView *talkView;
 }
 

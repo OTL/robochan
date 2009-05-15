@@ -9,14 +9,21 @@
 /* $Id:$ */
 
 #import <UIKit/UIKit.h>
-
-@class OTLGLViewController;
-@class OTLKHRInterface;
+#import "OTLKHRInterface.h"
+#import "OTLTabBarController.h"
+#import "OTLRobochanViewController.h"
+#import "OTLGLViewController.h"
+#import "OTLPoseTeachViewController.h"
+#import "OTLNullViewController.h"
+#import "OTLTestViewController.h"
+#import "OTLJointTestViewController.h"
+#import "OTLWindow.h"
+#import "OTLUINavigationController.h"
 
 /** @brief アプリメインクラス
  *
  */
-@interface RobochanAppDelegate : NSObject <UIApplicationDelegate> {
+@interface RobochanAppDelegate : NSObject <UIApplicationDelegate, UIAlertViewDelegate> {
   /// iPhoneのウィンドウ
   UIWindow *window;
   /// ViewController
@@ -36,5 +43,7 @@
 //- (void)sendCommand:(id)sender;
 /// セグメントコントロールを追加
 //- (void)addSegment;
+
+- (void)showConnectionCheckAlert;
 @end
 

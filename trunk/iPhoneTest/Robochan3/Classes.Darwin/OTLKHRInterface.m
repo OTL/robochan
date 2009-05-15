@@ -11,6 +11,8 @@
 #define PRINTF(s) {}
 //#define PRINTFD(S,val) {}
 #define PRINTFD(s, val) {FILE* f=fopen("/var/tmp/robochan.log","a");fprintf(f,"%s = %d\n",s,val);fclose(f);}
+#define PRINTFU(s, val) {FILE* f=fopen("/var/tmp/robochan.log","a");fprintf(f,"%s = %u\n",s,val);fclose(f);}
+#define PRINTFF(s, val) {FILE* f=fopen("/var/tmp/robochan.log","a");fprintf(f,"%s = %lf\n",s,val);fclose(f);}
 //#define PRINTF(s) {FILE* f=fopen("/var/tmp/robochan.log","a");fclose(f);}
 //#define PRINTF(s) {}
 
@@ -18,31 +20,57 @@
 
 @implementation OTLKHRInterface
 
+@synthesize dof;
+@synthesize isConnected;
 
-
-- (int)getFd
+- (void)connectCheckThreadLoop:(id)info
 {
-  return (fd);
+  [self get_version];
+  isConnected = YES;
+  [NSThread exit];
+}
+
+- (BOOL)checkConnection
+{
+  [NSThread detachNewThreadSelector:@selector(connectCheckThreadLoop:) toTarget:self withObject:nil];
+  [NSThread sleepUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.5]];
+  return isConnected;
 }
 
 /** シリアルポートの初期化
  *
  * 
  */
-- (void) serial_init
+- (BOOL) serialInit
 {
-  PRINTF(__FUNCTION__);
-  struct termios tio;
+  struct termios tio; // シリアルポート設定用構造体
+  
+  // すでに開いているときはいったんクローズする
+  if ( fd > 0 )
+  {
+    close(fd);
+  }
+  // ポートのオープン
+  fd = open(DEV_NAME,O_RDWR | O_NOCTTY);
+  if ( fd < 0 )
+  {
+    NSLog(@"%s: error in open %s\n", __FUNCTION__, DEV_NAME);
+    return NO;
+  }
+  // ポートの設定
   memset(&tio,0,sizeof(tio));
   tio.c_cflag = CS8 | CLOCAL | CREAD;
   tio.c_cc[VTIME] = 0;
-  //tio.c_cc[VMIN] = 100; // これが必要
   tio.c_cc[VMIN] = 1; // これが必要
+
   // ボーレートの設定
   cfsetispeed(&tio,BAUD_RATE);
   cfsetospeed(&tio,BAUD_RATE);
+  
   // デバイスに設定を行う
   tcsetattr(fd,TCSANOW,&tio);
+  
+  return YES;
 }
 
 /**
@@ -158,7 +186,7 @@
   return 1;
 }
 
-- (int) set_dyingp_motion:(unsigned char) option: (unsigned short) lvl: (unsigned char) mtn
+- (int) set_dying_motion:(unsigned char) option: (unsigned short) lvl: (unsigned char) mtn
 {
   PRINTF(__FUNCTION__);
   send_buffer[2] = mtn;
@@ -248,7 +276,9 @@
 /* メイン                                                                */
 /* --------------------------------------------------------------------- */
 
-
+/**
+ * まちがっている
+ */
 - (void)getHomeAngles
 {
   int i = 0;
@@ -264,26 +294,13 @@
 {
   // デバイスファイル（シリアルポート）オープン
   PRINTF(__FUNCTION__);
-  dof = 17;
-  fd = open(DEV_NAME,O_RDWR | O_NOCTTY);
-  if(fd < 0){
-    // デバイスの open() に失敗したら
-//    NSLog(@"fail to open device\n");
-    perror("fail to open device");
-  }else{
-    [self serial_init];
-    //tcflush(fd, TCIOFLUSH);
-  }
+  dof = RCB3J_MAX_DOF; // KHR-2HVは17ではない。欠番があるようだ。
+  isConnected = NO;
+  [self serialInit];
 //  [self getHomeAngles];
-  
-  return [super init];
+  [super init];
+  return self;
 }
-
-//         printf("gs : get settings\n");
-//         printf("00 : set soft switch all off\n");
-//         printf("p number : play motion\n");
-//         printf("a : get angles\n");
-//         printf("g number : free joint and get anlge\n");
 
 - (int)getSettings
 {
@@ -324,33 +341,21 @@
   return 0;
 }
 
-// while(1) ??
-- (int)freeJointAndGetAngles:(int)i
-{
-//  printf("free joint and get angle\n");
-  while(1) {
-    [self set_joint_param:RCB3J_OPT_ACK_ON:i:1:
-	    RCB3J_MOT_PARAM_FREE];
-    [self get_angles];
-    /*                 RCB3J_print_receive_buffer(49); */
-//    printf("angle = %d\n",
-//	   ((unsigned short)receive_buffer[i*2])*0x100+
-//	   ((unsigned short)receive_buffer[i*2+1]));
-//    usleep(100*1000);
-  }
-  return 0;
-}
-
 
 #define RCB3J_PARAMSCALE 6000
 
 - (double)param2angle:(unsigned short) param
 {
-  return ( ((param - (64 * 256)) / (64 * 256 -1)) * RCB3J_PARAMSCALE);
+  double ret = 0;
+  ret = (( (double)param - (double)RCB3J_MOT_PARAM_ANGLE_CENTER ) / (RCB3J_MOT_PARAM_ANGLE_CENTER -1))  * RCB3J_PARAMSCALE;
+  PRINTFU("param2angle: before\n", param);
+  PRINTFF("param2angle: after\n", ret);
+  return ret;
 }
 
 - (unsigned short)angle2param:(double) ang
 {
+  unsigned short ret = 0;
   if ( ang > 180 )
   {
     ang = 180;
@@ -359,29 +364,102 @@
   {
     ang = -180;
   }
+  ret = (RCB3J_MOT_PARAM_ANGLE_CENTER + ((RCB3J_MOT_PARAM_ANGLE_CENTER - 1.0) / RCB3J_PARAMSCALE) * ang);
+
+  // 最大値を超えていないかチェックする
+  if ( ret > RCB3J_MOT_PARAM_ANGLE_MAX)
+  {
+    NSLog(@"%s: error out of range angle param for KHR %u > 32767", __FUNCTION__, ret);
+    ret = RCB3J_MOT_PARAM_ANGLE_MAX;
+  }
   
-  return ((64 * 256) + ((64.0 * 256.0 - 1.0) / RCB3J_PARAMSCALE) * ang);
+  return ret;
 }
 
-- (int)getJointAngles:(double *)ang
+- (BOOL)getJointAngles:(double *)ang
 {
   int i = 0;
-  [self send_cmd: RCB3J_CMD_GET_ANGLES: 1: 49];
+  unsigned short param = 0;
+
+  // 全軸フリーにする
+//  for (int i = 0; i < dof; i++)
+//  {
+//    [self setJointServo:0 at:i];
+  //  }
+  
+  // 関節角度（2byte * dof）を受信
+  [self send_cmd: RCB3J_CMD_GET_ANGLES: 1: 49]; // 49 = 2(byte data) * 24(dof) + 1(check sum)
+  
   for (i = 0; i < dof; i++)
   {
-    ang[i] = [self param2angle: (receive_buffer[2*i] << 8 + receive_buffer[2*i+1])];
+    // 上位ビット(unsigned char)をunsigned short型へ変換
+    param = (unsigned short) receive_buffer[2*i];
+    // 上位ビットなので256倍する
+    param = param << 8;
+    // 下位ビットを加える
+    param += receive_buffer[2*i+1];
+    // doubleの角度(deg)へ書き込み
+    ang[i] = [self param2angle: param];
   }
-  return 0;
+
+  return YES;
 }
 
-- (int)getJointAngle:(double *)ang at:(int)i
+- (BOOL)setJointServoOffAll
 {
-  [self send_cmd: RCB3J_CMD_GET_ANGLES: 1: 49];
-  *ang = [self param2angle: (receive_buffer[2*i] << 8) + receive_buffer[2*i+1]];
-  return 0;
+  for (int i = 0; i < dof; i++)
+  {
+    [self setJointServo:0 at:i];
+  }
+  return YES;
 }
 
-- (int)setJointAngles:(double *)ang time:(double)tm
+- (BOOL)setJointServoOnAll
+{
+  for (int i = 0; i < dof; i++)
+  {
+    [self setJointServo:0 at:i];
+  }
+  return YES;
+}
+
+- (BOOL)getJointServo:(int *)onoff at:(int)i
+{
+  return NO;
+}
+
+- (BOOL)getJointServos:(int *)onoff
+{
+  return NO;
+}
+
+- (BOOL)setJointServo:(int)onoff at:(int)i
+{
+  [self set_joint_param:RCB3J_OPT_ACK_ON:i:1:RCB3J_MOT_PARAM_FREE];
+  return YES;
+}
+
+- (BOOL)setJointServos:(int *) onoff
+{
+  for (int i = 0; i < dof; i++)
+  {
+    [self setJointServo:onoff[i] at:i];
+  }
+  return YES;
+}
+
+// 全軸受信しかできないのでgetJointAnglesを利用する
+- (BOOL)getJointAngle:(double *)ang at:(int)i
+{
+  double angles[RCB3J_MAX_DOF];
+
+  [self getJointAngles:angles];
+  *ang = angles[i];
+
+  return YES;
+}
+
+- (BOOL)setJointAngles:(double *)ang time:(double)tm
 {
   unsigned short params[RCB3J_MAX_DOF];
   
@@ -400,7 +478,7 @@
   
   [self send_cmd_opt:RCB3J_CMD_SET_ALL_JOINT_PARAM :RCB3J_OPT_ACK_ON :53 :1]; // 送信
   
-  return 0;
+  return YES;
 }
 
 - (unsigned char)time2speed:(double)tm
@@ -417,11 +495,18 @@
     tm = 10;
   }
   sp = (2000/tm) + 1;
+
+  // 0を送ってはいけないので念のためチェック
+  if ( sp == 0 )
+  {
+    NSLog(@"%s:%d error sp = 0\n", __FUNCTION__, __LINE__);
+    sp = 1;
+  }
   
   return sp;
 }
 
-- (int)setJointAngle:(double)ang at:(int)jointId time:(double)tm;
+- (BOOL)setJointAngle:(double)ang at:(int)jointId time:(double)tm;
 {
 //  unsigned short pang = 0;
   unsigned short pang = 0;
@@ -439,7 +524,7 @@
   PRINTFD("homeAngles[jointId]", homeAngles[jointId]);
   [self set_joint_param:RCB3J_OPT_ACK_ON :(unsigned char)jointId :(unsigned char)tm : pang];
 
-  return 0;
+  return YES;
 }
 
 - (int)playMotion:(int)i

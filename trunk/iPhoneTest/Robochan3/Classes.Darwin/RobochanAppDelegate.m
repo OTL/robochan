@@ -10,15 +10,6 @@
 #import "RobochanAppDelegate.h"
 //#import "EAGLView.h"
 //#import "OTLWorld.h"
-#import "OTLKHRInterface.h"
-#import "OTLTabBarController.h"
-#import "OTLRobochanViewController.h"
-#import "OTLGLViewController.h"
-#import "OTLPoseTeachViewController.h"
-#import "OTLNullViewController.h"
-#import "OTLTestViewController.h"
-#import "OTLJointTestViewController.h"
-#import "OTLWindow.h"
 
 //#import "set_text.h"
 
@@ -27,6 +18,39 @@
 @synthesize window;
 @synthesize tabController;
 @synthesize ri;
+
+- (void)setControllersRi:(OTLKHRInterface *)ari
+{
+  for (OTLUIViewController *vc in controllers)
+  {
+    if ( [vc respondsToSelector:@selector(setRi:)] )
+    {
+      vc.ri = ari;
+    }
+  }
+}
+
+- (void)alertView: (UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+  switch(buttonIndex)
+  {
+
+    case 0:      // キャンセル →　デバッグモードへ
+      break;
+    case 1:      // 再接続
+      [ri serialInit];
+      if (![ri checkConnection])
+      {
+        [self showConnectionCheckAlert];
+      }
+      else // 接続成功
+      {
+        [self setControllersRi:ri];
+      }
+  
+      break;
+  }
+}
 
 // - (void)addLabel
 // {
@@ -43,7 +67,18 @@
 //   label.textColor = [UIColor colorWithRed:76.0/255.0 green:86.0/255.0 blue:108.0/255.0 alpha:1.0];
 //   label.backgroundColor = [UIColor clearColor];
 //   [window addSubview:label];  
-// }
+
+
+- (void)showConnectionCheckAlert
+{
+  UIAlertView *checkAlert = [[UIAlertView alloc] initWithTitle:@"ロボットとの接続エラー"
+                                                       message:@"ロボットの電源・接続を確認してください"
+                                                      delegate:self
+                                               cancelButtonTitle:@"接続しない"
+                                             otherButtonTitles:@"リトライ", nil];
+  [checkAlert show];
+  [checkAlert release];
+}
 
 // Sets up the frame rate and starts animating the sprite.
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
@@ -53,17 +88,20 @@
   CGRect rect = [[UIScreen mainScreen] bounds];
   window = [[OTLWindow alloc] initWithFrame:rect];
 
-  ri = [[OTLKHRInterface alloc] init];
+  [[UIDevice currentDevice] setOrientation:UIInterfaceOrientationLandscapeRight];
+  
+ 
   tabController =  [[OTLTabBarController alloc] initWithNibName:nil bundle:nil];
   glController = [[[OTLGLViewController alloc] init] autorelease];
-  UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:
-								  [[[OTLPoseTeachViewController alloc] initWithRobotInterface:ri] autorelease]];
-  
+  OTLUINavigationController *nav = [[OTLUINavigationController alloc] initWithRootViewController:
+								  [[[OTLPoseTeachViewController alloc] init] autorelease]];
+
+  // OTLUIViewControllerを"必ず"継承すること
   controllers = [NSArray arrayWithObjects:
                            [[[OTLRobochanViewController alloc] init] autorelease],
                          nav,
-                         [[[OTLTestViewController alloc] initWithRobotInterface:ri] autorelease],
-                         [[[OTLJointTestViewController alloc] initWithRobotInterface:ri] autorelease],
+                         [[[OTLTestViewController alloc] init] autorelease],
+                         [[[OTLJointTestViewController alloc] init] autorelease],
                          glController,
                          [[[OTLNullViewController alloc] init] autorelease],
                          nil];
@@ -81,12 +119,24 @@
   // ラベル（デバッグ用？）追加
   //[self addLabel];
 
-  // Now show the status bar, but animate to the style.
-
-  [[UIDevice currentDevice] setOrientation:UIInterfaceOrientationLandscapeRight];
+  // Now show the status bar, but animate to the style.  
   [window addSubview: tabController.view];
   //[application setStatusBarHidden:NO animated:YES];
-  //ウィンドウの表示
+
+  // ロボットへ接続
+  ri = [[OTLKHRInterface alloc] init];
+  if ( ![ri checkConnection] ) // ケーブル接続エラー
+  {
+    [self showConnectionCheckAlert];
+  }
+  
+  // 接続されていなければデバッグモードで動作する
+  // 接続されていればインタフェースへのポインタを渡す
+  if ( ri.isConnected ){
+    [self setControllersRi:ri];
+  }
+ 
+  //ウィンドウの表示  
   [window makeKeyAndVisible];
   //[glView drawView];
 

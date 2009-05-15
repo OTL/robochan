@@ -10,6 +10,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		360F1EB50FBDE19600508C6C /* OTLUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 360F1EB40FBDE19600508C6C /* OTLUINavigationController.m */; };
 		3631C58C0FA96B5800202767 /* smile.png in Resources */ = {isa = PBXBuildFile; fileRef = 3631C58B0FA96B5800202767 /* smile.png */; };
 		36502D690FABDE9C006F426E /* OTLGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36502D680FABDE9C006F426E /* OTLGLViewController.m */; };
 		36502D7C0FABE609006F426E /* OTLPoseTeachViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36502D7B0FABE609006F426E /* OTLPoseTeachViewController.m */; };
@@ -50,6 +51,8 @@
 		1D6058910D05DD3D006BFB54 /* Robochan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Robochan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		360F1EB30FBDE19600508C6C /* OTLUINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLUINavigationController.h; sourceTree = "<group>"; };
+		360F1EB40FBDE19600508C6C /* OTLUINavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLUINavigationController.m; sourceTree = "<group>"; };
 		3631C5070FA9607A00202767 /* OTLRobotInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLRobotInterface.h; sourceTree = "<group>"; };
 		3631C5420FA962D600202767 /* OTLTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLTabBarController.h; sourceTree = "<group>"; };
 		3631C58B0FA96B5800202767 /* smile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile.png; path = Resources/smile.png; sourceTree = "<group>"; };
@@ -225,6 +228,8 @@
 				36DE0BF80FAA8DD4008D046C /* OTLTalkView.m */,
 				36502D7A0FABE609006F426E /* OTLPoseTeachViewController.h */,
 				36502D7B0FABE609006F426E /* OTLPoseTeachViewController.m */,
+				360F1EB30FBDE19600508C6C /* OTLUINavigationController.h */,
+				360F1EB40FBDE19600508C6C /* OTLUINavigationController.m */,
 			);
 			path = Classes.Darwin;
 			sourceTree = "<group>";
@@ -312,6 +317,7 @@
 				36DE0BF90FAA8DD4008D046C /* OTLTalkView.m in Sources */,
 				36502D690FABDE9C006F426E /* OTLGLViewController.m in Sources */,
 				36502D7C0FABE609006F426E /* OTLPoseTeachViewController.m in Sources */,
+				360F1EB50FBDE19600508C6C /* OTLUINavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

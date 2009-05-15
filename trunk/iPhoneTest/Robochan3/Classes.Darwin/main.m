@@ -13,18 +13,7 @@
  *
  * RobochanとはiPod touchでKHR-2HVを動かすプロジェクト
  * このソフトはそのiPod touch用ソフトウェアです。
- * - world
- * - ground
- * - drawableObject
  *
- * @todo coordクラス
- * @todo glm:テクスチャの確認
- * @todo glmでdepthがおかしくなる修正
- * @todo 顔の作成
- * @todo アプリの選択
- * @todo アプリケーションのフレームワーク
- * @todo 動作教示アプリ
- * @todo リアクションアプリ
  * @todo ダンスアプリ
  * @todo 目覚ましアプリ
  * 
