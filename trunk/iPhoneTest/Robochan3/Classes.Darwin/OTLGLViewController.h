@@ -14,7 +14,9 @@
 /** @brief 
  *
  */
-@interface OTLGLViewController : UIViewController{
+@interface OTLGLViewController : UIViewController
+{
+@private
   /// OpenGL ES
   EAGLView *glView;
 }

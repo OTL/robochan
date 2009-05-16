@@ -59,8 +59,8 @@
 {
   ///UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0,0,480,320)];
   [super loadView];
-  self.view = [[EAGLView alloc] initWithFrame:CGRectMake(0, 0, 480, 340)];
-  glView = self.view;
+  glView = [[EAGLView alloc] initWithFrame:CGRectMake(0, 0, 480, 340)];
+  self.view = glView;
 
   //[view setAutoresizingMask:UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth];
 

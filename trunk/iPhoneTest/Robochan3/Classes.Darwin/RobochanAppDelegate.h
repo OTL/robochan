@@ -15,7 +15,6 @@
 #import "OTLGLViewController.h"
 #import "OTLPoseTeachViewController.h"
 #import "OTLNullViewController.h"
-#import "OTLTestViewController.h"
 #import "OTLJointTestViewController.h"
 #import "OTLWindow.h"
 #import "OTLUINavigationController.h"
@@ -24,13 +23,14 @@
  *
  */
 @interface RobochanAppDelegate : NSObject <UIApplicationDelegate, UIAlertViewDelegate> {
-  /// iPhoneのウィンドウ
-  UIWindow *window;
-  /// ViewController
-  UITabBarController *tabController;
-  OTLGLViewController *glController;
-  NSArray *controllers;
-  OTLKHRInterface *ri;
+@private
+  
+  UIWindow *window;  @private// iPhoneのウィンドウ
+  
+  UITabBarController *tabController; // ViewController
+  OTLGLViewController *glController; // ViewController
+  NSArray *controllers; // ViewController
+  OTLKHRInterface *ri; 
 }
 
 @property (nonatomic, retain) UIWindow *window;
@@ -44,6 +44,5 @@
 /// セグメントコントロールを追加
 //- (void)addSegment;
 
-- (void)showConnectionCheckAlert;
 @end
 

@@ -1,6 +1,6 @@
 /** 
- @file OTLRobochanViewController.h
- @brief èâä˙èÛë‘Ç≈ï\é¶Ç∑ÇÈView
+ @file OTLNullViewController.h
+ @brief Robochanアプリのひな形にしてください。
  @author Takashi Ogura
  @date 2009/03/01
  @version 0.0.1
@@ -11,11 +11,11 @@
 #import <UIKit/UIKit.h>
 #import "OTLUIViewController.h"
 
-/** @brief èâä˙èÛë‘Ç≈ï\é¶Ç∑ÇÈViewControllerÉNÉâÉX
+/** @brief サンプルクラス
  *
  */
 @interface OTLNullViewController : OTLUIViewController{
-	IBOutlet UITextField *hoge;
+
 }
 
 @end

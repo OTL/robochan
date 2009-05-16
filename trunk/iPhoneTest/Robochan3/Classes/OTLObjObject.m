@@ -27,7 +27,7 @@
   NSString* path;
   path = [bundle pathForResource:@"hoge" ofType:@"obj"];
   const char *cstr = [path UTF8String];
-  model = glmReadOBJ(cstr);
+  model = glmReadOBJ((char *)cstr);
   //glmReverseWinding(model);
   return (self);
 }
@@ -44,7 +44,7 @@
   NSString* path;
   path = [bundle pathForResource:objFile ofType:@"obj"];
   const char *cstr = [path UTF8String];
-  model = glmReadOBJ(cstr);
+  model = glmReadOBJ((char *)cstr);
   //glmReverseWinding(model);
   return (self);
 }

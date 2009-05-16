@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "OTLUIViewController.h"
 
-@interface OTLJointTestViewController : OTLUIViewController <UIPickerViewDelegate>{
-    UIPickerView *pickerView;
+@interface OTLJointTestViewController : OTLUIViewController <UIPickerViewDelegate>
+{
+  @private
+  UIPickerView *pickerView;
 }
 
 @end

@@ -8,10 +8,11 @@
 
 /* $Id:$ */
 #import "RobochanAppDelegate.h"
-//#import "EAGLView.h"
-//#import "OTLWorld.h"
 
-//#import "set_text.h"
+
+@interface RobochanAppDelegate (private)
+- (void)showConnectionCheckAlert;
+@end
 
 @implementation RobochanAppDelegate
 
@@ -38,14 +39,14 @@
     case 0:      // キャンセル →　デバッグモードへ
       break;
     case 1:      // 再接続
-      [ri serialInit];
-      if (![ri checkConnection])
+      [self.ri serialInit];
+      if (![self.ri checkConnection])
       {
         [self showConnectionCheckAlert];
       }
       else // 接続成功
       {
-        [self setControllersRi:ri];
+        [self setControllersRi:self.ri];
       }
   
       break;
@@ -100,17 +101,13 @@
   controllers = [NSArray arrayWithObjects:
                            [[[OTLRobochanViewController alloc] init] autorelease],
                          nav,
-                         [[[OTLTestViewController alloc] init] autorelease],
+//                         [[[OTLTestViewController alloc] init] autorelease],
                          [[[OTLJointTestViewController alloc] init] autorelease],
-                         glController,
+//                         glController,
                          [[[OTLNullViewController alloc] init] autorelease],
                          nil];
 	[nav release];
 
-  // TEST
-//  init();
-//  RCB3J_play_motion(RCB3J_OPT_ACK_ON, (((int)2) & 0xff));
-//  close(fd);
 
   [tabController setViewControllers:controllers animated:NO];
   [tabController setCustomizableViewControllers:controllers];
