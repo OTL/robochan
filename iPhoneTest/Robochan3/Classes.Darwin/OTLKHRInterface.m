@@ -25,8 +25,12 @@
 
 - (void)connectCheckThreadLoop:(id)info
 {
-  [self get_version];
+  NSAutoreleasePool *pool = [NSAutoreleasePool new];
+  
+  [self getVersion];
   isConnected = YES;
+  
+  [pool release];
   [NSThread exit];
 }
 
@@ -74,178 +78,220 @@
 }
 
 /**
- *  @brief send_buffer[]にあるデータをsizeバイト送信する。
+ *  @brief sendBuffer[]にあるデータをsizeバイト送信する。
  *
  * @param size 送信サイズ(byte)
  * @retval 1 常に1を返す
  */
-- (int) send:(int)size
+- (int) sendWithSize:(int)size
 {
-  PRINTF(__FUNCTION__);
   int i;
   unsigned char sum = 0;
   unsigned char buf[1];
 
   // send OK?
-  buf[0] = 0x0d;
-  PRINTFD("line", __LINE__);
+  buf[0] = RCB3J_CMD_INIT;
   write(fd, buf, 1);
-  PRINTFD("line", __LINE__);
-  //tcflush(fd, TCOFLUSH);
-  PRINTFD("line", __LINE__);
-  // wait OK
-//  usleep(100 * 1000);
   read(fd, buf, 1);
-  PRINTFD("line", __LINE__);
-  //
+  // make check sum
   if (size > 0)
+  {
+    for( i=0; i < size; i++)
     {
-      for( i=0; i < size; i++)
-        {
-          sum += send_buffer[i];
-        }
-      send_buffer[i] = sum;
-      PRINTFD("line", __LINE__);
-      write(fd, send_buffer, size+1);
-      PRINTFD("line", __LINE__);
-      //tcflush(fd, TCOFLUSH);
+      sum += sendBuffer[i];
     }
+    sendBuffer[i] = sum; // set check sum to buffer
+    // write all buffer
+    write(fd, sendBuffer, size+1);
+  }
 
   return 1;
 }
 
-- (int)receive:(int) size
+/** データの受信
+ *  最後のチェックサムを無視している
+ */
+- (int)receiveWithSize:(int)size
 {
-  PRINTF(__FUNCTION__);
-  int rt = 0;
-  int ret = 0;
+  int rt = 0;  // 読み込んだ位置
+  int ret = 0; // 返り値
 
-  PRINTFD("target", size);
-//      usleep(300 * 1000);
   while ( rt < size )
-    {
-      PRINTF("read1");
-      PRINTF("read12");
-      ret = read(fd, &receive_buffer[rt], size - rt);
-      PRINTF("read2");
-      if ( ret < 0 ){
-	PRINTF ("read error\n");
-	return (-1);
-      }
-      rt += ret;
-      PRINTFD("read", rt);
+  {
+    ret = read(fd, &receiveBuffer[rt], size - rt);
+    if ( ret < 0 ){
+      NSLog (@"read error\n");
+      return (-1);
     }
-
-  PRINTF("read finish \n");
+    rt += ret;
+  }
+  
   return 1;
 }
 
-- (int) send_cmd: (unsigned char) command: (int) size: (int) ack_size
+/** バッファのクリア
+ *
+ */
+- (void)clearBuffer
 {
-  PRINTF(__FUNCTION__);
-  send_buffer[0] = command;
-  [self send:size];
-  [self receive:ack_size];
-  return 1;
+  memset(sendBuffer, 0, RCB3J_BUFFER_SIZE);
+  memset(receiveBuffer, 0, RCB3J_BUFFER_SIZE);
 }
 
-- (int) send_cmd_opt: (unsigned char) command: (unsigned char) option: (int) size: (int) ack_size
+/** コマンドの送信
+ *
+ */
+- (int) sendCommand:(unsigned char)command sendSize:(int)size	receiveSize:(int)ack_size
 {
-  PRINTF(__FUNCTION__);
-  send_buffer[0] = command;
-  send_buffer[1] = option;
-  [self send:size];
-  if (option & RCB3J_OPT_ACK_ON) 
-    {
-      [self receive:ack_size];
-    }
+  // コマンドセット
+  sendBuffer[0] = command;
+  // 送信 
+  [self sendWithSize:size];
+  // 受信
+  [self receiveWithSize:ack_size];
+
   return 1;
 }
 
+/** オプション付きのコマンド送信
+ *
+ */
+- (int) sendCommand: (unsigned char) command sendSize:(int) size receiveSize:(int)ack_size option:(unsigned char)option
+{
+  // コマンド・オプションの設定
+  sendBuffer[0] = command;
+  sendBuffer[1] = option;
+  // 送信
+  [self sendWithSize:size];
+  if (option & RCB3J_OPT_ACK_ON)
+  {
+    // 受信
+    [self receiveWithSize:ack_size];
+  }
+  
+  return 1;
+}
+
+/*
 - (int) get_wakeup_motion
 {
   PRINTF(__FUNCTION__);
-  [self send_cmd:RCB3J_CMD_GET_WAKEUP_MOTION:1:3];
+  [self sendCommand:RCB3J_CMD_GET_WAKEUP_MOTION
+           sendSize:1
+        receiveSize:3];
   return 1;
 }
 
 - (int) set_wakeup_motion:(unsigned char) option: (unsigned char) btn: (unsigned char) stp
 {
   PRINTF(__FUNCTION__);
-  send_buffer[2] = btn;
-  send_buffer[3] = stp;
-  [self send_cmd_opt:RCB3J_CMD_SET_WAKEUP_MOTION:option:4:1];
+  sendBuffer[2] = btn;
+  sendBuffer[3] = stp;
+  [self sendCommand:RCB3J_CMD_SET_WAKEUP_MOTION
+           sendSize:4
+        receiveSize:1
+             option:option];
   return 1;
 }
+*/
 
-
+/*
 - (int) get_dying_motion
 {
   PRINTF(__FUNCTION__);
-  [self send_cmd:RCB3J_CMD_GET_DYING_MOTION:1:4];
+  [self sendCommand:RCB3J_CMD_GET_DYING_MOTION
+           sendSize:1
+        receiveSize:4];
   return 1;
 }
 
 - (int) set_dying_motion:(unsigned char) option: (unsigned short) lvl: (unsigned char) mtn
 {
   PRINTF(__FUNCTION__);
-  send_buffer[2] = mtn;
-  send_buffer[3] = (lvl >> 8) & 0x3;
-  send_buffer[4] = lvl & 0xff;
-  [self send_cmd_opt:RCB3J_CMD_SET_DYING_MOTION:option:5:1];
+  sendBuffer[2] = mtn;
+  sendBuffer[3] = (lvl >> 8) & 0x3;
+  sendBuffer[4] = lvl & 0xff;
+  [self sendCommand:RCB3J_CMD_SET_DYING_MOTION
+           sendSize:5
+        receiveSize:1
+             option:option];
   return 1;
 }
+*/
 
-
-- (int) get_version
+/** バージョン情報取得
+ *
+ */
+- (int) getVersion
 {
-  PRINTF(__FUNCTION__);
-  [self send_cmd:RCB3J_CMD_GET_RCB3J_VERSION:1:65];
+  [self sendCommand:RCB3J_CMD_GET_RCB3J_VERSION
+           sendSize:1
+        receiveSize:65];
+  receiveBuffer[64] = '\0';
+  NSLog(@"RCB3J version = [%s]\n", receiveBuffer);
+  
   return 1;
 }
 
+/*
 - (int) get_soft_sw:(unsigned char) option
 {
   PRINTF(__FUNCTION__);
-  [self send_cmd_opt:RCB3J_CMD_GET_SOFT_SW:option:2:3];
+  [self sendCommand:RCB3J_CMD_GET_SOFT_SW
+           sendSize:2
+        receiveSize:3
+             option:option];
   return 1;
 }
 
 - (int) set_soft_sw:(unsigned char) option: (unsigned char) swh: (unsigned char) swl
 {
-  send_buffer[2] = swh;
-  send_buffer[3] = swl;
-  [self send_cmd_opt:RCB3J_CMD_SET_SOFT_SW:option:4:1];
+  sendBuffer[2] = swh;
+  sendBuffer[3] = swl;
+  [self sendCommand:RCB3J_CMD_SET_SOFT_SW
+            sendSize:4
+         receiveSize:1
+              option:option];
   return 1;
 }
-
-
+*/
+/*
 - (int) play_motion:(unsigned char) option: (unsigned char) mot
 {
-  send_buffer[2] = mot;
-  [self send_cmd_opt:RCB3J_CMD_PLAY_MOTION:option:3:1];
+  sendBuffer[2] = mot;
+  [self sendCommand:RCB3J_CMD_PLAY_MOTION
+           sendSize:3
+        receiveSize:1
+             option:option];
   return 1;
 }
-
-
+*/
+/*
 - (int) get_angles
 {
-  [self send_cmd:RCB3J_CMD_GET_ANGLES:1:49];
+  [self sendCommand:RCB3J_CMD_GET_ANGLES
+           sendSize:1
+        receiveSize:49];
   return 1;
 }
+*/
 
-
-- (int) set_joint_param:(unsigned char) option:(unsigned char) joint_num:(unsigned char) speed:(unsigned short) param
+- (int) setJointParam:(unsigned short) param jointId:(unsigned char) joint_num speed:(unsigned char) speed option:(unsigned char) option
 {
-  send_buffer[2] = joint_num;
-  send_buffer[3] = speed;
-  send_buffer[4] = param >> 8;
-  send_buffer[5] = param & 0xff;
-  [self send_cmd_opt:RCB3J_CMD_SET_JOINT_PARAM:option:6:1];
+  sendBuffer[2] = joint_num;
+  sendBuffer[3] = speed;
+  sendBuffer[4] = param >> 8;
+  sendBuffer[5] = param & 0xff;
+  NSLog(@"setJointParam: %u %u %u\n", joint_num, speed, param);
+  [self sendCommand:RCB3J_CMD_SET_JOINT_PARAM
+           sendSize:6
+        receiveSize:1
+             option:option];
   return 1;
 }
 
 
+/*
 - (int) set_all_joint_param:(unsigned char) option: (unsigned char *) pSpeed:(unsigned short *)pParam
 {
   return 1;
@@ -254,18 +300,18 @@
 
 - (int) get_all_joint_param:(unsigned char) option: (unsigned char) joint_num
 {
-  //    send_buffer[2] = joint_num;
-  //    send_cmd_opt(RCB3J_CMD_GET_ALL_JOINT_PARAM, option, 3, 1);
+  //    sendBuffer[2] = joint_num;
+  //    sendCommand(RCB3J_CMD_GET_ALL_JOINT_PARAM, option, 3, 1);
   return 1;
 }
+*/
 
-
-- (int) print_receive_buffer:(int) size
+- (int) printReceiveBuffer:(int) size
 {
   int i;
   for( i=0;i<size;i++)
     {
-      PRINTFD("[%02X]", receive_buffer[i]);
+      PRINTFD("[%02X]", receiveBuffer[i]);
     }
  // printf("\n");
   return 1;
@@ -282,10 +328,13 @@
 - (void)getHomeAngles
 {
   int i = 0;
-  [self send_cmd_opt: RCB3J_CMD_GET_HOME: RCB3J_OPT_ACK_ON: 2: 49];
+  [self sendCommand:RCB3J_CMD_GET_HOME
+	sendSize:2
+	receiveSize:49
+	option:RCB3J_OPT_ACK_ON];
   for (i = 0; i < dof; i++)
   {
-    homeAngles[i] = (receive_buffer[2*i] << 8) + receive_buffer[2*i+1];
+    homeAngles[i] = (receiveBuffer[2*i] << 8) + receiveBuffer[2*i+1];
   }
 }
 
@@ -302,20 +351,21 @@
   return self;
 }
 
+/*
 - (int)getSettings
 {
 //  printf("get RCB3J version : ");
-  [self get_version];
-//  printf("[%s]\n", receive_buffer);
+  [self getVersion];
+//  printf("[%s]\n", receiveBuffer);
 //  printf("get wakeup motion : ");
   [self get_wakeup_motion];
-  [self print_receive_buffer:3];
+  [self print_receiveBuffer:3];
 //  printf("get dying motion : ");
   [self get_dying_motion];
-  [self print_receive_buffer:4];
+  [self print_receiveBuffer:4];
 //  printf("get soft switch : ");
   [self get_soft_sw:(RCB3J_OPT_ACK_ON | RCB3J_OPT_EEPROM)];
-  [self print_receive_buffer:3];
+  [self print_receiveBuffer:3];
   return 0;
 }
 
@@ -337,19 +387,16 @@
 {
 //  printf("get angles\n");
   [self get_angles];
-  [self print_receive_buffer:49];
+  [self print_receiveBuffer:49];
   return 0;
 }
+*/
 
-
-#define RCB3J_PARAMSCALE 6000
 
 - (double)param2angle:(unsigned short) param
 {
   double ret = 0;
   ret = (( (double)param - (double)RCB3J_MOT_PARAM_ANGLE_CENTER ) / (RCB3J_MOT_PARAM_ANGLE_CENTER -1))  * RCB3J_PARAMSCALE;
-  PRINTFU("param2angle: before\n", param);
-  PRINTFF("param2angle: after\n", ret);
   return ret;
 }
 
@@ -376,28 +423,49 @@
   return ret;
 }
 
+- (unsigned char)time2speed:(double)tm
+{
+  unsigned char sp = 1;
+  // 10     -> 1
+  // 5000  -> 250
+  if ( tm > 5000 )
+  {
+    tm = 5000;
+  }
+  else if ( tm < 10 )
+  {
+    tm = 10;
+  }
+//  sp = (2000/tm) + 1;
+  sp = (tm / RCB3J_SPEED_RATE) + 1;
+
+  // 0を送ってはいけない
+  if ( sp == 0 )
+  {
+    sp = 1;
+  }
+  
+  return sp;
+}
+
 - (BOOL)getJointAngles:(double *)ang
 {
   int i = 0;
   unsigned short param = 0;
-
-  // 全軸フリーにする
-//  for (int i = 0; i < dof; i++)
-//  {
-//    [self setJointServo:0 at:i];
-  //  }
   
   // 関節角度（2byte * dof）を受信
-  [self send_cmd: RCB3J_CMD_GET_ANGLES: 1: 49]; // 49 = 2(byte data) * 24(dof) + 1(check sum)
+  [self sendCommand:RCB3J_CMD_GET_ANGLES
+           sendSize:1
+        receiveSize:49]; // 49 = 2(byte data) * 24(dof) + 1(check sum)
   
   for (i = 0; i < dof; i++)
   {
     // 上位ビット(unsigned char)をunsigned short型へ変換
-    param = (unsigned short) receive_buffer[2*i];
+    param = (unsigned short) receiveBuffer[2*i];
     // 上位ビットなので256倍する
     param = param << 8;
     // 下位ビットを加える
-    param += receive_buffer[2*i+1];
+    param += receiveBuffer[2*i+1];
     // doubleの角度(deg)へ書き込み
     ang[i] = [self param2angle: param];
   }
@@ -409,7 +477,7 @@
 {
   for (int i = 0; i < dof; i++)
   {
-    [self setJointServo:0 at:i];
+    [self setJointServo: (int)OTLServoOff at:i];
   }
   return YES;
 }
@@ -418,7 +486,7 @@
 {
   for (int i = 0; i < dof; i++)
   {
-    [self setJointServo:0 at:i];
+    [self setJointServo: (int)OTLServoOn at:i];
   }
   return YES;
 }
@@ -435,8 +503,16 @@
 
 - (BOOL)setJointServo:(int)onoff at:(int)i
 {
-  [self set_joint_param:RCB3J_OPT_ACK_ON:i:1:RCB3J_MOT_PARAM_FREE];
-  return YES;
+  BOOL ret = NO;
+  if ( onoff != (int)OTLServoOn ){
+    //    [self set_joint_param:RCB3J_OPT_ACK_ON:i:1:RCB3J_MOT_PARAM_FREE];
+    [self setJointParam:RCB3J_MOT_PARAM_FREE
+                jointId:i
+                  speed:1
+                 option:RCB3J_OPT_ACK_ON];
+    ret = YES;
+  }
+  return ret;
 }
 
 - (BOOL)setJointServos:(int *) onoff
@@ -463,48 +539,27 @@
 {
   unsigned short params[RCB3J_MAX_DOF];
   
-  send_buffer[2] = 0; // 利用するモーション番号 ( 0 ~ 79)
-  send_buffer[3] = 0; // 利用するポジション番号（RAMなので無関係)
+  sendBuffer[2] = 0; // 利用するモーション番号 ( 0 ~ 79)
+  sendBuffer[3] = 0; // 利用するポジション番号（RAMなので無関係)
   
-  send_buffer[4] = [self time2speed:tm]; // 速度の設定
+  sendBuffer[4] = [self time2speed:tm]; // 速度の設定
   
   // 角度の設定
   for (int i = 0; i < dof; i++)
   {
     params[i] = [self angle2param:ang[i]];
-    send_buffer[5 + 2*i]   = params[i] >> 8;
-    send_buffer[5 + 2*i+1] = params[i] & 0xff;
+    sendBuffer[5 + 2*i]   = params[i] >> 8;
+    sendBuffer[5 + 2*i+1] = params[i] & 0xff;
   }
   
-  [self send_cmd_opt:RCB3J_CMD_SET_ALL_JOINT_PARAM :RCB3J_OPT_ACK_ON :53 :1]; // 送信
+  [self sendCommand:RCB3J_CMD_SET_ALL_JOINT_PARAM
+           sendSize:53
+        receiveSize:1
+             option:RCB3J_OPT_ACK_ON]; // 送信
   
   return YES;
 }
 
-- (unsigned char)time2speed:(double)tm
-{
-  unsigned char sp = 1;
-  // 10     -> 100
-  // 10000  ->   1
-  if ( tm > 10000 )
-  {
-    tm = 10000;
-  }
-  else if ( tm < 10 )
-  {
-    tm = 10;
-  }
-  sp = (2000/tm) + 1;
-
-  // 0を送ってはいけないので念のためチェック
-  if ( sp == 0 )
-  {
-    NSLog(@"%s:%d error sp = 0\n", __FUNCTION__, __LINE__);
-    sp = 1;
-  }
-  
-  return sp;
-}
 
 - (BOOL)setJointAngle:(double)ang at:(int)jointId time:(double)tm;
 {
@@ -522,23 +577,28 @@
   pang = [self angle2param: ang];
   //  pang = (unsigned short)((64 * 256) + ang);
   PRINTFD("homeAngles[jointId]", homeAngles[jointId]);
-  [self set_joint_param:RCB3J_OPT_ACK_ON :(unsigned char)jointId :(unsigned char)tm : pang];
-
+  [self setJointParam:pang
+              jointId:(unsigned char)jointId
+                speed:[self time2speed:tm]
+               option:RCB3J_OPT_ACK_ON];
   return YES;
 }
 
-- (int)playMotion:(int)i
+- (int)playPresetMotionId:(int)i
 {
-//  printf("play motion\n");
-  [self play_motion:RCB3J_OPT_ACK_ON:(i & 0xff)];
+  sendBuffer[2] = (i & 0xff);
+  [self sendCommand:RCB3J_CMD_PLAY_MOTION
+           sendSize:3
+        receiveSize:1
+             option:RCB3J_OPT_ACK_ON];
+
   return 0;
 }
  
 - (void)dealloc
 {
   close(fd);
-  PRINTF("CLOSE!!\n");
-//  NSLog(@"close interface\n");
+  NSLog(@"close interface\n");
   [super dealloc];
 }
 

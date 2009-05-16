@@ -10,6 +10,7 @@
 #import "OTLKHRInterface.h"
 
 @interface OTLPoseTeachViewController : UITableViewController <UIAlertViewDelegate> {
+@private
   NSMutableArray *fileList;
   OTLKHRInterface *ri;
 }

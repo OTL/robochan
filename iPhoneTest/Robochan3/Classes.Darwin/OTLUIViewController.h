@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class OTLKHRInterface;
+#import "OTLKHRInterface.h"
 
 @interface OTLUIViewController : UIViewController {
+@protected
   OTLKHRInterface *ri;
 }
 

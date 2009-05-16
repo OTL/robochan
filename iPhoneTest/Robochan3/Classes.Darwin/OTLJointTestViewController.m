@@ -65,6 +65,7 @@ numberOfRowsInComponent:(NSInteger)component
     str = [NSString stringWithFormat:@"%d [ms]", (1 + row) * 100];
     break;
   }
+  return str;
 }
 
 - (void)pickerView:(UIPickerView *)aPickerView
@@ -75,20 +76,13 @@ numberOfRowsInComponent:(NSInteger)component
 
 - (void)setJoint:(id)sender
 {
-  switch([sender selectedSegmentIndex])
-  {
-    case 0:
-      [ri setJointAngle:(double)(([pickerView selectedRowInComponent:1] - 9) * 10)
-                     at:(int)[pickerView selectedRowInComponent:0]
-                   time: (double)(1 + [pickerView selectedRowInComponent:2]) * 100];
-      break;
-    case 1:
-      [ri setJointServo:0 at:(int)[pickerView selectedRowInComponent:0]];
-      break;
-  }
-//  [ri setJointAngle:(int)[pickerView selectedRowInComponent:0]];
- }
-
+  double ang  = (double) (([pickerView selectedRowInComponent:1] - 9) * 10);
+  int jointId = (int)[pickerView selectedRowInComponent:0];
+  double tm = (double)((1 + [pickerView selectedRowInComponent:2]) * 100);
+  
+  NSLog(@"setting joint %d angle %f time %f\n", jointId, ang, tm);
+  [ri setJointAngle:ang at:jointId time:tm];
+}
 
 /**
  *  @brief セグメントコントロールを追加する
@@ -96,19 +90,15 @@ numberOfRowsInComponent:(NSInteger)component
  */
 - (void)addSegment
 {
-  UISegmentedControl *segmentedControl = 
-    [[UISegmentedControl alloc] initWithItems:
-				  [NSArray arrayWithObjects:
-					     @"setJoint",
-               @"servo off",
-   					   nil]];
+  UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:
+                                          [NSArray arrayWithObjects:
+                                           @"connect", @"motion1", @"motion2", @"servo all off", nil]];
   segmentedControl.momentary = YES;
     
   // Compute a rectangle that is positioned correctly for the segmented control you'll use as a brush color palette
-  CGRect frame = CGRectMake(340,50,120,50);
-  segmentedControl.frame = frame;
+  segmentedControl.frame = CGRectMake(0,1,480,54);
   // When the user chooses a color, the method changeBrushColor: is called.
-  [segmentedControl addTarget:self action:@selector(setJoint:)
+  [segmentedControl addTarget:self action:@selector(sendCommand:)
 		    forControlEvents:UIControlEventValueChanged];
   segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
   // Make sure the color of the color complements the black background
@@ -122,29 +112,58 @@ numberOfRowsInComponent:(NSInteger)component
   [segmentedControl release];
 }
 
+- (void)sendCommand:(id)sender
+{
+  switch([sender selectedSegmentIndex]){
+  case 0:
+      [self.ri serialInit];
+      break;
+  case 1:
+      [self.ri playPresetMotionId:1];
+      break;
+  case 2:
+      [self.ri playPresetMotionId:2];
+      break;
+  case 3:
+      [self.ri setJointServoOffAll];
+      break;
+  default:
+    break;
+  }
+}
+
+/** 関節角度を送信するボタンを追加する
+ *
+ */
+- (void)addButton
+{
+  UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+  [button setFrame:CGRectMake(320.0f, 55.0f, 160.0f, 215.0f)];
+  [button setTitle:@"動け！" forState:UIControlStateNormal];
+  [button addTarget:self action:@selector(setJoint:) forControlEvents:UIControlEventTouchUpInside];
+  [self.view addSubview:button];
+}
+
+/** pickverを追加する
+ *
+ */
+- (void)addPicker
+{
+  float height = 55.0f; // 表示高さ
+  pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0f, height, 320.0f, 216.0f + height)];
+  pickerView.delegate = self;
+  pickerView.showsSelectionIndicator = YES;
+  [pickerView selectRow:9 inComponent:1 animated:NO];
+  [pickerView selectRow:4 inComponent:2 animated:NO];
+  [self.view addSubview:pickerView];  
+  [pickerView release];
+}
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-
-//   UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 200, 320, 30)];
-//   label.font = [UIFont boldSystemFontOfSize:22];
-//   label.backgroundColor = [UIColor lightGrayColor];
-//   label.textColor = [UIColor blackColor];
-//   label.text = @"開発中！";
-//   label.textAlignment = UITextAlignmentCenter;
-//   [self.view addSubview:label];	
-//   [label release];		
-
-  
-  float height = 20;
-  //pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0f, height, 320.0f, 216 + height)];
-  pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0.0f, height, 320.0f, 216 + height)];
-  pickerView.delegate = self;
-  pickerView.showsSelectionIndicator = YES;
-  [self.view addSubview:pickerView];
-  [pickerView release];
-
+  [self addPicker];
   [self addSegment];
+  [self addButton];
 }
 
 /*
@@ -160,9 +179,9 @@ numberOfRowsInComponent:(NSInteger)component
   if (self = [super initWithNibName:nil bundle:nil])
   {
 		self.view.backgroundColor = [UIColor lightGrayColor];		
-		self.title = @"ジョイントテスト";
+		self.title = @"動作テスト";
 		self.tabBarItem.image = [UIImage imageNamed:@"teachTabIcon_32.png"]; 
-		self.tabBarItem.badgeValue = @"3";
+		self.tabBarItem.badgeValue = @"開発";
   }
 
   return self;

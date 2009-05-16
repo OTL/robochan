@@ -10,6 +10,7 @@
 #import "UICalloutView.h"
 
 @interface OTLTalkView : UIView {
+@private
   UIImageView *imgView;
   BOOL isVisible;
 }

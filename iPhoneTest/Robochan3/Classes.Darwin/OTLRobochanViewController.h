@@ -14,6 +14,7 @@
 #import "OTLUIViewController.h"
 
 @interface OTLRobochanViewController : OTLUIViewController{
+@private
   OTLTalkView *talkView;
 }
 

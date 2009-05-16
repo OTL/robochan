@@ -11,6 +11,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		360F1EB50FBDE19600508C6C /* OTLUINavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 360F1EB40FBDE19600508C6C /* OTLUINavigationController.m */; };
+		36299C7A0FBEAA2300EA1284 /* OTLRobotPose.m in Sources */ = {isa = PBXBuildFile; fileRef = 36299C790FBEAA2300EA1284 /* OTLRobotPose.m */; };
 		3631C58C0FA96B5800202767 /* smile.png in Resources */ = {isa = PBXBuildFile; fileRef = 3631C58B0FA96B5800202767 /* smile.png */; };
 		36502D690FABDE9C006F426E /* OTLGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36502D680FABDE9C006F426E /* OTLGLViewController.m */; };
 		36502D7C0FABE609006F426E /* OTLPoseTeachViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36502D7B0FABE609006F426E /* OTLPoseTeachViewController.m */; };
@@ -31,7 +32,6 @@
 		36DFC7AE0F9DE431007CCDBD /* OTLRobochanViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7950F9DE431007CCDBD /* OTLRobochanViewController.m */; };
 		36DFC7AF0F9DE431007CCDBD /* OTLTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7970F9DE431007CCDBD /* OTLTabBarController.m */; };
 		36DFC7B00F9DE431007CCDBD /* OTLTeachViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC7990F9DE431007CCDBD /* OTLTeachViewController.m */; };
-		36DFC7B10F9DE431007CCDBD /* OTLTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC79B0F9DE431007CCDBD /* OTLTestViewController.m */; };
 		36DFC7B20F9DE431007CCDBD /* OTLWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC79D0F9DE431007CCDBD /* OTLWindow.m */; };
 		36DFC7B30F9DE431007CCDBD /* RobochanAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 36DFC79F0F9DE431007CCDBD /* RobochanAppDelegate.m */; };
 		36DFC7B80F9DE52B007CCDBD /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 36DFC7B70F9DE52B007CCDBD /* OpenGLES.framework */; };
@@ -53,6 +53,8 @@
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		360F1EB30FBDE19600508C6C /* OTLUINavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLUINavigationController.h; sourceTree = "<group>"; };
 		360F1EB40FBDE19600508C6C /* OTLUINavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLUINavigationController.m; sourceTree = "<group>"; };
+		36299C780FBEAA2300EA1284 /* OTLRobotPose.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLRobotPose.h; sourceTree = "<group>"; };
+		36299C790FBEAA2300EA1284 /* OTLRobotPose.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLRobotPose.m; sourceTree = "<group>"; };
 		3631C5070FA9607A00202767 /* OTLRobotInterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLRobotInterface.h; sourceTree = "<group>"; };
 		3631C5420FA962D600202767 /* OTLTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLTabBarController.h; sourceTree = "<group>"; };
 		3631C58B0FA96B5800202767 /* smile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smile.png; path = Resources/smile.png; sourceTree = "<group>"; };
@@ -91,8 +93,6 @@
 		36DFC7970F9DE431007CCDBD /* OTLTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLTabBarController.m; sourceTree = "<group>"; };
 		36DFC7980F9DE431007CCDBD /* OTLTeachViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLTeachViewController.h; sourceTree = "<group>"; };
 		36DFC7990F9DE431007CCDBD /* OTLTeachViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLTeachViewController.m; sourceTree = "<group>"; };
-		36DFC79A0F9DE431007CCDBD /* OTLTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLTestViewController.h; sourceTree = "<group>"; };
-		36DFC79B0F9DE431007CCDBD /* OTLTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLTestViewController.m; sourceTree = "<group>"; };
 		36DFC79C0F9DE431007CCDBD /* OTLWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OTLWindow.h; sourceTree = "<group>"; };
 		36DFC79D0F9DE431007CCDBD /* OTLWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OTLWindow.m; sourceTree = "<group>"; };
 		36DFC79E0F9DE431007CCDBD /* RobochanAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobochanAppDelegate.h; sourceTree = "<group>"; };
@@ -200,22 +200,20 @@
 			children = (
 				36502D670FABDE9C006F426E /* OTLGLViewController.h */,
 				36502D680FABDE9C006F426E /* OTLGLViewController.m */,
-				3631C5420FA962D600202767 /* OTLTabBarController.h */,
-				3631C5070FA9607A00202767 /* OTLRobotInterface.h */,
 				36DFC78D0F9DE431007CCDBD /* EAGLView.h */,
 				36DFC78E0F9DE431007CCDBD /* EAGLView.m */,
 				36DFC78F0F9DE431007CCDBD /* main.m */,
+				3631C5070FA9607A00202767 /* OTLRobotInterface.h */,
 				36DFC7900F9DE431007CCDBD /* OTLKHRInterface.h */,
 				36DFC7910F9DE431007CCDBD /* OTLKHRInterface.m */,
 				36DFC7920F9DE431007CCDBD /* OTLNullViewController.h */,
 				36DFC7930F9DE431007CCDBD /* OTLNullViewController.m */,
 				36DFC7940F9DE431007CCDBD /* OTLRobochanViewController.h */,
 				36DFC7950F9DE431007CCDBD /* OTLRobochanViewController.m */,
+				3631C5420FA962D600202767 /* OTLTabBarController.h */,
 				36DFC7970F9DE431007CCDBD /* OTLTabBarController.m */,
 				36DFC7980F9DE431007CCDBD /* OTLTeachViewController.h */,
 				36DFC7990F9DE431007CCDBD /* OTLTeachViewController.m */,
-				36DFC79A0F9DE431007CCDBD /* OTLTestViewController.h */,
-				36DFC79B0F9DE431007CCDBD /* OTLTestViewController.m */,
 				36DFC79C0F9DE431007CCDBD /* OTLWindow.h */,
 				36DFC79D0F9DE431007CCDBD /* OTLWindow.m */,
 				36DFC79E0F9DE431007CCDBD /* RobochanAppDelegate.h */,
@@ -230,6 +228,8 @@
 				36502D7B0FABE609006F426E /* OTLPoseTeachViewController.m */,
 				360F1EB30FBDE19600508C6C /* OTLUINavigationController.h */,
 				360F1EB40FBDE19600508C6C /* OTLUINavigationController.m */,
+				36299C780FBEAA2300EA1284 /* OTLRobotPose.h */,
+				36299C790FBEAA2300EA1284 /* OTLRobotPose.m */,
 			);
 			path = Classes.Darwin;
 			sourceTree = "<group>";
@@ -309,7 +309,6 @@
 				36DFC7AE0F9DE431007CCDBD /* OTLRobochanViewController.m in Sources */,
 				36DFC7AF0F9DE431007CCDBD /* OTLTabBarController.m in Sources */,
 				36DFC7B00F9DE431007CCDBD /* OTLTeachViewController.m in Sources */,
-				36DFC7B10F9DE431007CCDBD /* OTLTestViewController.m in Sources */,
 				36DFC7B20F9DE431007CCDBD /* OTLWindow.m in Sources */,
 				36DFC7B30F9DE431007CCDBD /* RobochanAppDelegate.m in Sources */,
 				3684D4040F9F530A001E227C /* OTLJointTestViewController.m in Sources */,
@@ -318,6 +317,7 @@
 				36502D690FABDE9C006F426E /* OTLGLViewController.m in Sources */,
 				36502D7C0FABE609006F426E /* OTLPoseTeachViewController.m in Sources */,
 				360F1EB50FBDE19600508C6C /* OTLUINavigationController.m in Sources */,
+				36299C7A0FBEAA2300EA1284 /* OTLRobotPose.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
